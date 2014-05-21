@@ -1,6 +1,6 @@
 package trunk.banco;
 
-public class Simulador
+public class App
 {
 
 }

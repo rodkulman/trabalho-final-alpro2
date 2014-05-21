@@ -3,7 +3,7 @@ package trunk.supermercado;
 /*
  * Programa principal da simulacao
  */
-public class SimuladorSupermercado
+public class App
 {
 	public static void main(String[] args)
 	{
