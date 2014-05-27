@@ -1,4 +1,4 @@
-package trunk.meta;
+package meta;
 
 public class EmptyQueueException extends RuntimeException
 {

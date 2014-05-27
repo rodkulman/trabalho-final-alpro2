@@ -1,4 +1,4 @@
-package trunk.supermercado;
+package supermercado;
 
 /*
  * Programa principal da simulacao

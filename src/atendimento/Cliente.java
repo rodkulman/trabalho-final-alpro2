@@ -1,4 +1,4 @@
-package trunk.atendimento;
+package atendimento;
 
 import java.util.Random;
 

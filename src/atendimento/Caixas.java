@@ -1,6 +1,6 @@
-package trunk.atendimento;
+package atendimento;
 
-import trunk.meta.*;
+import meta.*;
 
 /**
  * Representa uma coleção de caixas.

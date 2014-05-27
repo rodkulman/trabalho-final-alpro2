@@ -1,4 +1,4 @@
-package trunk.meta;
+package meta;
 
 public class QueueLinked<E> implements QueueTAD<E>
 {

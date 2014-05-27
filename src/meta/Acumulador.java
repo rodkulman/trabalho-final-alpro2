@@ -1,4 +1,4 @@
-package trunk.meta;
+package meta;
 
 /*
  * Classe utilitaria que realiza calculos de media aritmetica

@@ -1,4 +1,4 @@
-package trunk.atendimento;
+package atendimento;
 
 public class Caixa
 {

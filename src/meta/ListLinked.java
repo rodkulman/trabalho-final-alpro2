@@ -1,4 +1,4 @@
-package trunk.meta;
+package meta;
 
 import java.util.Iterator;
 

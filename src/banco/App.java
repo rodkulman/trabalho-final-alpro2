@@ -1,4 +1,4 @@
-package trunk.banco;
+package banco;
 
 public class App
 {

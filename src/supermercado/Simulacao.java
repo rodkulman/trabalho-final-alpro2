@@ -1,7 +1,7 @@
-package trunk.supermercado;
+package supermercado;
 
-import trunk.meta.*;
-import trunk.atendimento.*;
+import meta.*;
+import atendimento.*;
 
 /*
  * Classe com a logica da simulacao passo-a-passo
