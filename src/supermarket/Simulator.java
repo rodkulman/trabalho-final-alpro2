@@ -4,103 +4,126 @@ import services.*;
 import meta.*;
 import meta.collections.*;
 
-/*
- * Classe com a logica da simulacao passo-a-passo
+/**
+ * Defines the supermarket simulator.
+ * @author rodkulman@gmail.com 
  */
 public class Simulator
 {
-	private static final int duracao = 200;
-	private static final double probabilidadeChegada = 0.1;
-	private IQueue<Client> fila;
-	private Cashier caixa;
-	private ClientGenerator geradorClientes;
-	private Counter statTemposEsperaFila;
-	private Counter statComprimentosFila;
+	/**
+	 * Indicates for how long the simulation is going to last.
+	 */
+	private static final int duration = 200;
+	/**
+	 * Indicates the probability of new clients arriving.
+	 */
+	private static final double arrivalProbability = 0.1;
+	/**
+	 * The client queue waiting to be served.
+	 */
+	private IQueue<Client> queue;
+	/**
+	 * The cashier serving the clients.
+	 */
+	private Cashier cashier;
+	/**
+	 * Indicates whether new clients arrived.
+	 */
+	private ClientGenerator clientGenerator;
+	/**
+	 * Calculates the average waiting time.
+	 */
+	private Counter watingTime;
+	/**
+	 * Calculates the average queue size.
+	 */
+	private Counter queueSize;
 
-	public Simulator(boolean t)
+	/**
+	 * Initializes a new simulator, indicating whether it should trace.
+	 * @param trace
+	 */
+	public Simulator(boolean trace)
 	{
-		fila = new QueueLinked<Client>();
-		caixa = new Cashier();
-		geradorClientes = new ClientGenerator(probabilidadeChegada);
-		statTemposEsperaFila = new Counter();
-		statComprimentosFila = new Counter();
-		Trace.setTracing(t);
+		queue = new QueueLinked<Client>();
+		cashier = new Cashier();
+		clientGenerator = new ClientGenerator(arrivalProbability);
+		watingTime = new Counter();
+		queueSize = new Counter();
+		Trace.setTracing(trace);
 	}
 
-	public void simular()
+	public void simulate()
 	{
-		// realizar a simulacao por um certo numero de passos de duracao
-		for (int tempo = 0; tempo < duracao; tempo++)
+		//each step simulates a minute
+		for (int time = 0; time < duration; time++)
 		{
-			// verificar se um cliente chegou
-			if (geradorClientes.gerar())
+			//check if a new client arrived.
+			if (clientGenerator.generate())
 			{
-				// se cliente chegou, criar um cliente e inserir na fila do
-				// caixa
-				Client c = new Client(geradorClientes.getQuantidadeGerada(), tempo);
-				fila.enqueue(c);
+				//if arrived, add to the cashier queue.
+				Client c = new Client(clientGenerator.getAmountGenerated(), time);
+				queue.enqueue(c);
 
-				Trace.log(tempo + ": cliente " + c.getNumero() + " (" + c.getTempoAtendimento() + " min) entra na fila - " + fila.size() + " pessoa(s)");
+				Trace.log(time + ": cliente " + c.getID() + " (" + c.getRemainigTime() + " min) entra na fila - " + queue.size() + " pessoa(s)");
 			}
 
-			// verificar se o caixa esta vazio
-			if (caixa.isEmpty())
+			//checks if the cashier is free.
+			if (cashier.isEmpty())
 			{
-				// se o caixa esta vazio, atender o primeiro cliente da fila se
-				// ele existir
-				if (!fila.isEmpty())
+				//if the cashier is free, checks if there is a client waiting
+				if (!queue.isEmpty())
 				{
-					// tirar o cliente do inicio da fila e atender no caixa
-					caixa.serveNewClient(fila.dequeue());
-					statTemposEsperaFila.add(tempo - caixa.getCurrentClient().getInstanteChegada());
+					//gets the first client in the queue
+					cashier.serveNewClient(queue.dequeue());
+					watingTime.add(time - cashier.getCurrentClient().getArrival());
 
-					Trace.log(tempo + ": cliente " + caixa.getCurrentClient().getNumero() + " chega ao caixa.");
+					Trace.log(time + ": cliente " + cashier.getCurrentClient().getID() + " chega ao caixa.");
 
 				}
 			}
 			else
 			{
-				// se o caixa ja esta ocupado, diminuir de um em um o tempo de
-				// atendimento ate chegar a zero
-				if (caixa.getCurrentClient().getTempoAtendimento() == 0)
+				//if the cashier is busy, reduce the remaining time until it reaches 0
+				if (cashier.getCurrentClient().getRemainigTime() == 0)
 				{
+					Trace.log(time + ": cliente " + cashier.getCurrentClient().getID() + " deixa o caixa.");
 
-					Trace.log(tempo + ": cliente " + caixa.getCurrentClient().getNumero() + " deixa o caixa.");
-
-					caixa.endServing();
+					//when it reaches 0, ends the service
+					cashier.endServing();
 				}
 				else
 				{
-					caixa.getCurrentClient().decrementarTempoAtendimento();
+					cashier.getCurrentClient().decreaseRemaingTime();
 				}
 			}
 
-			statComprimentosFila.add(fila.size());
+			queueSize.add(queue.size());
 		}
 	}
 
-	public void limpar()
+	public void clear()
 	{
-		fila = new QueueLinked<Client>();
-		caixa = new Cashier();
-		geradorClientes = new ClientGenerator(probabilidadeChegada);
-		statTemposEsperaFila = new Counter();
-		statComprimentosFila = new Counter();
+		queue = new QueueLinked<Client>();
+		cashier = new Cashier();
+		clientGenerator = new ClientGenerator(arrivalProbability);
+		watingTime = new Counter();
+		queueSize = new Counter();
 	}
 
-	public void imprimirResultados()
+	public void printResults()
 	{
 		System.out.println();
 		System.out.println("Resultados da Simulacao");
-		System.out.println("Duracao:" + duracao);
-		System.out.println("Probabilidade de chegada de clientes:" + probabilidadeChegada);
+		System.out.println("Duracao:" + duration);
+		System.out.println("Probabilidade de chegada de clientes:" + arrivalProbability);
 		System.out.println("Tempo de atendimento minimo:" + Client.tempoMinAtendimento);
 		System.out.println("Tempo de atendimento maximo:" + Client.tempoMaxAtendimento);
-		System.out.println("Cliente atendidos:" + caixa.getServed());
-		System.out.println("Clientes ainda na fila:" + fila.size());
-		System.out.println("Cliente ainda no caixa:" + (caixa.getCurrentClient() != null));
-		System.out.println("Total de clientes gerados:" + geradorClientes.getQuantidadeGerada());
-		System.out.println("Tempo medio de espera:" + statTemposEsperaFila.getAverage());
-		System.out.println("Comprimento medio da fila:" + statComprimentosFila.getAverage());
+		System.out.println("Cliente atendidos:" + cashier.getServed());
+		System.out.println("Clientes ainda na fila:" + queue.size());
+		System.out.println("Cliente ainda no caixa:" + (cashier.getCurrentClient() != null));
+		System.out.println("Total de clientes gerados:" + clientGenerator.getAmountGenerated());
+		System.out.println("Tempo medio de espera:" + watingTime.getAverage());
+		System.out.println("Comprimento medio da fila:" + queueSize.getAverage());
 	}
 }

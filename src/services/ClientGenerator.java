@@ -3,35 +3,56 @@ package services;
 import java.util.Random;
 
 /**
- * Esta classe indica se um cliente sera gerado de acordo com a probabilidade indicada no construtor
+ * Defines a client generator, which creates them at random times.
  */
 public class ClientGenerator
 {
-	private double probabilidade;
-	private int quantidadeGerada;
-	private static final Random gerador = new Random();
+	/**
+	 * Probability of generation, from 0.0 to 1.0
+	 */
+	private double probability;
+	/**
+	 * The amount of clients generated.
+	 */
+	private int amountGenerated;
+	/**
+	 * Random number generator.
+	 */
+	private static final Random rnd = new Random();
 
-	public ClientGenerator(double p)
+	/**
+	 * Initializes a new instance with a specified probability.
+	 * @param prob The probability of generating new clients.
+	 */
+	public ClientGenerator(double prob)
 	{
-		probabilidade = p;
-		quantidadeGerada = 0;
+		probability = prob;
+		amountGenerated = 0;
 	}
 
-	public boolean gerar()
+	/**
+	 * Indicates whether a new client was generated.
+	 * @return True if generated, otherwise false.
+	 */
+	public boolean generate()
 	{
-		boolean gerado = false;
+		boolean created = false;
 		
-		if (gerador.nextDouble() < probabilidade)
+		if (rnd.nextDouble() < probability)
 		{
-			quantidadeGerada++;
-			gerado = true;
+			amountGenerated++;
+			created = true;
 		}
 		
-		return gerado;
+		return created;
 	}
 
-	public int getQuantidadeGerada()
+	/**
+	 * Gets the amount of clients generated.
+	 * @return Returns the amount of client objects generated.
+	 */
+	public int getAmountGenerated()
 	{
-		return quantidadeGerada;
+		return amountGenerated;
 	}
 }

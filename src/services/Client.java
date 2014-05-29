@@ -2,44 +2,81 @@ package services;
 
 import java.util.Random;
 
+/**
+ * Represents a client.
+ * @author rodkulman@gmail.com
+ *
+ */
 public class Client
 {
-	// numero do cliente
-	private int numero;
-	private int instanteChegada;
+	/**
+	 * The unique client ID.
+	 */
+	private int ID;
+	/**
+	 * The moment of arrival.
+	 */
+	private int arrival;
 
-	// quantidade de tempo que resta para o cliente no caixa
-	private int tempoAtendimento;
-	private static final Random gerador = new Random();
+	/**
+	 * Remaining time to end the serving.  
+	 */
+	private int remaingTime;
+	/**
+	 * Minimum service time.
+	 */
 	public static final int tempoMinAtendimento = 5;
+	/**
+	 * Maximum service time.
+	 */
 	public static final int tempoMaxAtendimento = 10;
 
-	public Client(int n, int c)
+	/**
+	 * Initializes a new client with an ID and moment of arrival.
+	 * @param ID
+	 * @param arrival
+	 */
+	public Client(int ID, int arrival)
 	{
-		numero = n;
-		instanteChegada = c;
+		this.ID = ID;
+		this.arrival = arrival;
 
-		// gera valores entre 5 e 20
-		tempoAtendimento = gerador.nextInt(tempoMaxAtendimento - tempoMinAtendimento + 1) + tempoMinAtendimento;
+		//Generates a number between 5 and 20
+		remaingTime = new Random().nextInt(tempoMaxAtendimento - tempoMinAtendimento + 1) + tempoMinAtendimento;
 	}
 
-	public int getNumero()
+	/**
+	 * Gets the Unique ID for the client.
+	 * @return The client's unique ID.
+	 */
+	public int getID()
 	{
-		return numero;
+		return ID;
 	}
 
-	public int getInstanteChegada()
+	/**
+	 * Gets the moment of arrival.
+	 * @return The moment the client arrived.
+	 */
+	public int getArrival()
 	{
-		return instanteChegada;
+		return arrival;
 	}
 
-	public void decrementarTempoAtendimento()
+	/**
+	 * Reduces the remaining time.
+	 */
+	public void decreaseRemaingTime()
 	{
-		tempoAtendimento--;
+		remaingTime--;
 	}
 
-	public int getTempoAtendimento()
+	/**
+	 * Gets the remaining time.
+	 * @return Returns the remaining time.
+	 */
+	public int getRemainigTime()
 	{
-		return tempoAtendimento;
+		return remaingTime;
 	}
 }

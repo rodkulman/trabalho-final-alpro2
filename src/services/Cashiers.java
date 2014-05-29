@@ -9,14 +9,24 @@ import meta.collections.ListLinked;
  */
 public abstract class Cashiers
 {
+	/**
+	 * The list of cashiers.
+	 */
 	protected ListLinked<Cashier> cashiers;
 	
+	/**
+	 * Initializes an empty list of cashier objects.
+	 */
 	protected Cashiers()
 	{
 		cashiers = new ListLinked<>();
 	}
 	
-	public boolean isEmpty()
+	/**
+	 * Looks for cashiers with no clients.
+	 * @return True if there is a single cashier has no client.
+	 */
+	public boolean isAnyEmpty()
 	{
 		for (Cashier c : cashiers)
 		{

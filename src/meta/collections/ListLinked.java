@@ -6,17 +6,29 @@ package meta.collections;
  */
 public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 {
+	/**
+	 * Initializes a instance of a ListLinked with no elements.
+	 */
 	public ListLinked()
 	{
 		super();
 	}
 	
+	/**
+	 * Adds an element to the end of the list.
+	 * @param e Element to be added.
+	 */
 	@Override
 	public void add(T e)
 	{
 		add(count, e);
 	}
 	
+	/**
+	 * Adds a new element at a specified index.
+	 * @param index Index to insert the element at.
+	 * @param element Element to be inserted.
+	 */
 	@Override
 	public void add(int index, T element)
 	{
@@ -49,6 +61,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 		count++;
 	}
 
+	/**
+	 * Returns the element at the specified index.
+	 * @param index Index to search for the element.
+	 * @return The element at the specified index.
+	 */
 	@Override
 	public T get(int index)
 	{
@@ -65,6 +82,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 	}
 
+	/**
+	 * Determines the index of a certain element.
+	 * @param element Element to search for.
+	 * @return The index of the element. If the element isn't within the list, returns -1.
+	 */
 	@Override
 	public int indexOf(T e)
 	{
@@ -81,6 +103,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 		return -1;
 	}
 
+	/**
+	 * Replaces a element at the specified index.
+	 * @param index Index to be replaced.
+	 * @param element Element which will replace the current one.
+	 */
 	@Override
 	public void set(int index, T element)
 	{
@@ -96,6 +123,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 		aux.element = element;
 	}
 
+	/**
+	 * Removes the specified element.
+	 * @param element Element to be removed. 
+	 * @return True if removed. False if the element doesn't exist in the list.
+	 */
 	@Override
 	public boolean remove(T e)
 	{
@@ -117,6 +149,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 		return false;
 	}
 
+	/**
+	 * Removes a element at the specified index.
+	 * @param index Index to search the element for.
+	 * @return The element which was removed.
+	 */
 	@Override
 	public T removeAt(int index)
 	{
@@ -136,6 +173,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 		return aux.element;
 	}
 
+	/**
+	 * Removes the specified node and corrects the missing link issue.
+	 * @param remove Node to be removed.
+	 * @param prev Node previous to the one being removed.
+	 */
 	private void removeNode(Node<T> remove, Node<T> prev)
 	{
 		if (prev == null) // removing first
@@ -154,6 +196,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 		count--;
 	}
 
+	/**
+	 * Determines if a certain element is within the list.
+	 * @param element Element to search for.
+	 * @return True if the element is within the list, otherwise false.
+	 */
 	@Override
 	public boolean contains(T e)
 	{

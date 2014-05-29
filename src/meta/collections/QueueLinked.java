@@ -12,6 +12,10 @@ public class QueueLinked<T> extends BasicLinkedList<T> implements IQueue<T>
 		super();
 	}
 	
+	/**
+	 * Returns the first element of the queue.
+	 * @return The first element of the queue.
+	 */
 	@Override
 	public T getHead()
 	{
@@ -19,6 +23,10 @@ public class QueueLinked<T> extends BasicLinkedList<T> implements IQueue<T>
 		return head.element;
 	}
 
+	/**
+     * Adds a new element to the queue.
+     * @param element New element.
+     */
 	@Override
 	public void enqueue(T element)
 	{
@@ -41,6 +49,10 @@ public class QueueLinked<T> extends BasicLinkedList<T> implements IQueue<T>
 		count++;
 	}
 
+	 /**
+     * Gets the oldest element in the list.
+     * @return The oldest element in the list.
+     */
 	@Override
 	public T dequeue()
 	{

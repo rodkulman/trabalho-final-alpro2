@@ -1,14 +1,15 @@
 package supermarket;
 
-/*
- * Programa principal da simulacao
+/**
+ * Program initializer
+ * @author rodkulman@gmail.com
  */
 public class App
 {
 	public static void main(String[] args)
 	{
 		Simulator sim = new Simulator(true);
-		sim.simular();
-		sim.imprimirResultados();
+		sim.simulate();
+		sim.printResults();
 	}
 }
