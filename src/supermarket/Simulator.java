@@ -8,7 +8,7 @@ import meta.collections.*;
  * Defines the supermarket simulator.
  * @author rodkulman@gmail.com 
  */
-public class Simulator
+public class Simulator implements ISimulator
 {
 	/**
 	 * Indicates for how long the simulation is going to last.
