@@ -43,7 +43,13 @@ public class XMLConfig
 		for (int i = 0; i < dataNodes.getLength(); i++) 
 		{
 			Node n = dataNodes.item(i);
-			data.add(n.getNodeName(), n.getNodeValue());
+			
+			if (n.getNodeType() == Node.ELEMENT_NODE)
+			{
+				Element e = (Element)n;				
+				
+				data.add(n.getNodeName().toUpperCase(), e.getChildNodes().item(0).getNodeValue());
+			}
 		}
 	}
 	
@@ -54,6 +60,6 @@ public class XMLConfig
 	 */
 	public String get(String name)
 	{
-		return data.getValue(name);
+		return data.getValue(name.toUpperCase());
 	}
 }

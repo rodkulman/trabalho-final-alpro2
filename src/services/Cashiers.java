@@ -17,9 +17,14 @@ public class Cashiers
 	/**
 	 * Initializes an empty list of cashier objects.
 	 */
-	protected Cashiers()
+	public Cashiers()
 	{
 		cashiers = new ListLinked<>();
+	}
+	
+	public void add(Cashier c)
+	{
+		cashiers.add(c);
 	}
 	
 	/**
