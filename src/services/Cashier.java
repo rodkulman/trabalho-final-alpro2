@@ -1,7 +1,7 @@
 package services;
 
 /**
- * Defines a cashir serving a client.
+ * Defines a cashier serving a client.
  * @author rodkulman@gmail.com
  *
  */
@@ -17,12 +17,51 @@ public class Cashier
 	private int served;
 
 	/**
+	 * Indicates whether this cashier has a priority.
+	 */
+	private final boolean priority;
+	/**
+	 * Indicates whether this cashier is a manager.
+	 */
+	private final boolean manager;
+	
+	/**
 	 * Initializes a new instance with no client, and no clients served.
 	 */
 	public Cashier()
 	{
-		currentClient = null;
-		served = 0;
+		this(false, false);
+	}
+	
+	/**
+	 * Instances a cashier, determining priority and manager status.
+	 * @param priority Indicates the priority.
+	 * @param manager Indicates whether this cashier is a manager.
+	 */
+	public Cashier(boolean priority, boolean manager)
+	{
+		this.priority = priority;
+		this.manager = manager;
+		this.currentClient = null;
+		this.served = 0;
+	}
+	
+	/**
+	 * Indicates whether this cashier has priority.
+	 * @return True if this cashier has priority, otherwise false.
+	 */
+	public boolean isPriority() 
+	{
+		return priority;
+	}
+	
+	/**
+	 * Indicates whether this cashier is a manager.
+	 * @return True if this cashier is a actually a manager, false if is a regular cashier.
+	 */
+	public boolean isManager() 
+	{
+		return manager;
 	}
 
 	/**

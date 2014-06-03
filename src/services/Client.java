@@ -12,16 +12,22 @@ public class Client
 	/**
 	 * The unique client ID.
 	 */
-	private int ID;
+	private final int ID;
 	/**
 	 * The moment of arrival.
 	 */
-	private int arrival;
+	private final int arrival;
 
 	/**
 	 * Remaining time to end the serving.  
 	 */
 	private int remaingTime;
+	
+	/**
+	 * Indicates whether this client requires priority.
+	 */
+	private final boolean priority;
+	
 	/**
 	 * Minimum service time.
 	 */
@@ -38,9 +44,15 @@ public class Client
 	 */
 	public Client(int ID, int arrival)
 	{
+		this(ID, arrival, false);
+	}
+	
+	public Client(int ID, int arrival, boolean priority)
+	{
 		this.ID = ID;
 		this.arrival = arrival;
-
+		this.priority = priority;
+		
 		//Generates a number between 5 and 20
 		remaingTime = new Random().nextInt(tempoMaxAtendimento - tempoMinAtendimento + 1) + tempoMinAtendimento;
 	}
@@ -78,5 +90,14 @@ public class Client
 	public int getRemainigTime()
 	{
 		return remaingTime;
+	}
+	
+	/**
+	 * Indicates whether this client requires priority.
+	 * @return True if this client requires priority, otherwise false.
+	 */
+	public boolean requiresPriority()
+	{
+		return priority;
 	}
 }

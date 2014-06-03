@@ -7,7 +7,7 @@ import meta.collections.ListLinked;
  * @author rodkulman@gmail.com
  *
  */
-public abstract class Cashiers
+public class Cashiers
 {
 	/**
 	 * The list of cashiers.

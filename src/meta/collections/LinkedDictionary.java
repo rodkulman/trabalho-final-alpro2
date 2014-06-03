@@ -5,16 +5,11 @@ package meta.collections;
  * @author rodkulman@gmail.com
  *
  */
-public class LinkedDictionary<TKey, TValue> implements IList
-{
-	/**
-	 * Internal KeyValuePair collection.
-	 */
-	ListLinked<KeyValuePair<TKey, TValue>> pairs;
-	
+public class LinkedDictionary<TKey, TValue> extends ListLinked<KeyValuePair<TKey, TValue>>
+{	
 	public LinkedDictionary()
 	{
-		pairs = new ListLinked<>();
+		super();
 	}
 	
 	/**
@@ -24,22 +19,7 @@ public class LinkedDictionary<TKey, TValue> implements IList
 	 */
 	public void add(TKey key, TValue value)
 	{
-		if (key == null)
-		{
-			throw new NullPointerException("key can't be null!");
-		}
-		
-		//checks for duplicate keys
-		for(KeyValuePair<TKey, TValue> pair : pairs)
-		{
-			if (pair.getKey().equals(key))
-			{
-				throw new DuplicateKeyException();
-			}
-		}
-		
-		//if successfully checked, add a new pair
-		pairs.add(new KeyValuePair<TKey, TValue>(key, value));
+		add(new KeyValuePair<>(key, value));
 	}
 	
 	/**
@@ -49,7 +29,7 @@ public class LinkedDictionary<TKey, TValue> implements IList
 	 */
 	public TValue getValue(TKey key)
 	{
-		for(KeyValuePair<TKey, TValue> pair : pairs)
+		for(KeyValuePair<TKey, TValue> pair : this)
 		{
 			if (pair.getKey().equals(key))
 			{
@@ -58,34 +38,5 @@ public class LinkedDictionary<TKey, TValue> implements IList
 		}
 		
 		return null;
-	}
-	
-	/**
-	 * Gets the size of the collection.
-	 * @return The size of the internal KeyValuePair collection.
-	 */
-	@Override
-	public int size()
-	{
-		return pairs.size();
-	}
-	
-	/**
-	 * Determines whether the collection is empty.
-	 * @return Returns true if there are no elements in the collection, otherwise false.
-	 */
-	@Override
-	public boolean isEmpty()
-	{
-		return size() == 0;
-	}
-	
-	/**
-	 * Clears the collection.
-	 */
-	@Override
-	public void clear()
-	{
-		pairs.clear();
 	}
 }
