@@ -11,13 +11,21 @@ import org.w3c.dom.*;
  * @author rodkulman@gmail.com
  *
  */
-public class XMLConfig 
+public final class XMLConfig 
 {
-	LinkedDictionary<String, String> data;
+	/**
+	 * Dictionary with the data.
+	 */
+	static LinkedDictionary<String, String> data;
 	
-	public XMLConfig(String filePath)
+	static { init(); }
+	
+	/**
+	 * Initializes the static XML config
+	 */
+	private static void init()
 	{
-		File file = new File(filePath);
+		File file = new File("config.xml");
 		Document doc;
 		
 		try 
@@ -58,8 +66,28 @@ public class XMLConfig
 	 * @param name Configuration name to search for.
 	 * @return Returns the specified value. Null if the value wasn't in the original configuration.
 	 */
-	public String get(String name)
+	public static String get(String name)
 	{
 		return data.getValue(name.toUpperCase());
+	}
+	
+	/**
+	 * Gets the value of said configuration name.
+	 * @param name Configuration name to search for.
+	 * @return Returns the specified value. Null if the value wasn't in the original configuration.
+	 */
+	public static int getInt(String name)
+	{
+		return Integer.parseInt(get(name));
+	}
+	
+	/**
+	 * Gets the value of said configuration name.
+	 * @param name Configuration name to search for.
+	 * @return Returns the specified value. Null if the value wasn't in the original configuration.
+	 */
+	public static double getDouble(String name)
+	{
+		return Double.parseDouble(get(name));
 	}
 }

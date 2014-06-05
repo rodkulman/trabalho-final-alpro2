@@ -1,14 +1,16 @@
 package bank;
 
+import meta.Trace;
+
 /**
  * Application initializer.
  * @author rodkulman@gmail.com
  *
  */
-public class App
+public final class App
 {
 	public static void main(String[] args)
 	{
-		
+		Trace.setTracing(true);
 	}
 }

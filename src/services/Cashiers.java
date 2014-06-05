@@ -40,4 +40,17 @@ public class Cashiers
 		
 		return false;
 	}
+	
+	public Cashier getFirstEmpty(boolean manager, boolean priority)
+	{
+		for (Cashier c : cashiers)
+		{
+			if (c.isEmpty() && c.isManager() == manager && c.isPriority() == priority)
+			{
+				return c;
+			}
+		}
+		
+		return null;
+	}
 }

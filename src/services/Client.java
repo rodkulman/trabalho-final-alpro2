@@ -1,5 +1,7 @@
 package services;
 
+import io.XMLConfig;
+
 import java.util.Random;
 
 /**
@@ -31,30 +33,26 @@ public class Client
 	/**
 	 * Minimum service time.
 	 */
-	public static final int tempoMinAtendimento = 5;
+	public static final int minServingTime = XMLConfig.getInt("minServingTime");
 	/**
 	 * Maximum service time.
 	 */
-	public static final int tempoMaxAtendimento = 10;
+	public static final int maxServingTime = XMLConfig.getInt("maxServingTime");
 
 	/**
 	 * Initializes a new client with an ID and moment of arrival.
-	 * @param ID
-	 * @param arrival
+	 * @param ID Its unique ID.
+	 * @param arrival Moment of arrival.
+	 * @param priority Indicates whether the client has a priority.
 	 */
-	public Client(int ID, int arrival)
-	{
-		this(ID, arrival, false);
-	}
-	
-	public Client(int ID, int arrival, boolean priority)
+	protected Client(int ID, int arrival, boolean priority)
 	{
 		this.ID = ID;
 		this.arrival = arrival;
 		this.priority = priority;
 		
 		//Generates a number between 5 and 20
-		remaingTime = new Random().nextInt(tempoMaxAtendimento - tempoMinAtendimento + 1) + tempoMinAtendimento;
+		remaingTime = new Random().nextInt(maxServingTime - minServingTime + 1) + minServingTime;
 	}
 
 	/**

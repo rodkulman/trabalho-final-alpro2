@@ -1,14 +1,17 @@
 package supermarket;
 
+import meta.Trace;
+
 /**
  * Program initializer
  * @author rodkulman@gmail.com
  */
-public class App
+public final class App
 {
 	public static void main(String[] args)
 	{
-		Simulator sim = new Simulator(true);
+		Trace.setTracing(true);
+		Simulator sim = new Simulator();
 		sim.simulate();
 		sim.printResults();
 	}

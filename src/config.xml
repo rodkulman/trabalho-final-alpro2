@@ -4,4 +4,8 @@
 	<priorityCashierNumber>1</priorityCashierNumber>
 	<managerNumber>1</managerNumber>
 	<priorityManagerNumber>1</priorityManagerNumber>
+	<arrivalProbability>0.1</arrivalProbability>
+	<minServingTime>5</minServingTime>
+	<maxServingTime>10</maxServingTime>
+	<priorityProbality>0.2<priorityProbality>
 </config>
