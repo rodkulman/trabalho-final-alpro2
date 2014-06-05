@@ -1,0 +1,7 @@
+<config>
+	<duration>200</duration>
+	<cashierNumber>1</cashierNumber>
+	<priorityCashierNumber>1</priorityCashierNumber>
+	<managerNumber>1</managerNumber>
+	<priorityManagerNumber>1</priorityManagerNumber>
+</config>

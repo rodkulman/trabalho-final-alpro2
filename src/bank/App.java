@@ -1,7 +1,5 @@
 package bank;
 
-import io.XMLConfig;
-
 /**
  * Application initializer.
  * @author rodkulman@gmail.com
