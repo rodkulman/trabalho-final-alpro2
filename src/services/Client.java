@@ -31,6 +31,11 @@ public class Client
 	private final boolean priority;
 	
 	/**
+	 * Indicates whether this client is looking for a manager;
+	 */
+	private final boolean lookingForManager;
+
+	/**
 	 * Minimum service time.
 	 */
 	public static final int minServingTime = XMLConfig.getInt("minServingTime");
@@ -45,11 +50,12 @@ public class Client
 	 * @param arrival Moment of arrival.
 	 * @param priority Indicates whether the client has a priority.
 	 */
-	protected Client(int ID, int arrival, boolean priority)
+	protected Client(int ID, int arrival, boolean priority, boolean lookingForManager)
 	{
 		this.ID = ID;
 		this.arrival = arrival;
 		this.priority = priority;
+		this.lookingForManager = lookingForManager;
 		
 		//Generates a number between 5 and 20
 		remaingTime = new Random().nextInt(maxServingTime - minServingTime + 1) + minServingTime;
@@ -97,5 +103,14 @@ public class Client
 	public boolean requiresPriority()
 	{
 		return priority;
+	}
+	
+	/**
+	 * Indicates whether this client is looking for a manager;
+	 * @return True if this client is looking for a manager, otherwise false.
+	 */
+	public boolean isLookingForManager() 
+	{
+		return lookingForManager;
 	}
 }

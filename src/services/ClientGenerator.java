@@ -39,12 +39,12 @@ public class ClientGenerator
 	 * @param priorityProbability The probability of the generated client to have a priority.
 	 * @return True if a client object was generated, otherwise false.
 	 */
-	public boolean generate(int arrival, double priorityProbability)
+	public boolean generate(int arrival, double priorityProbability, double managerProbability)
 	{
 		if (rnd.nextDouble() < probability)
 		{
 			generatedClient = 
-					new Client(++amountGenerated, arrival, rnd.nextDouble() < priorityProbability);
+					new Client(++amountGenerated, arrival, rnd.nextDouble() < priorityProbability, rnd.nextDouble() < managerProbability);
 		}
 		
 		return generatedClient != null;

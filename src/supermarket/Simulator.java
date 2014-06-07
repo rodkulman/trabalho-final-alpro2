@@ -36,7 +36,7 @@ public class Simulator extends BaseSimulator
 	protected void simulation(int time)
 	{
 		//check if a new client arrived.
-		if (clientGenerator.generate(time, 0.0))
+		if (clientGenerator.generate(time, 0.0, 0.0))
 		{
 			//if arrived, add to the cashier queue.
 			Client c = clientGenerator.getGeneratedClient();

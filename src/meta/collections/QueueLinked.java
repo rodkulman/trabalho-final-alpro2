@@ -30,7 +30,7 @@ public class QueueLinked<T> extends BasicLinkedList<T> implements IQueue<T>
 	@Override
 	public void enqueue(T element)
 	{
-		Node<T> n = new Node<>(element);
+		LinkedNode<T> n = new LinkedNode<>(element);
 
 		//if the only element in the queue, it becomes the first element
 		if (head == null) 
@@ -58,7 +58,7 @@ public class QueueLinked<T> extends BasicLinkedList<T> implements IQueue<T>
 	{
 		if (isEmpty()) { throw new EmptyQueueException(); }
 
-		Node<T> target = head;
+		LinkedNode<T> target = head;
 		T item = target.element;
 
 		head = target.next;

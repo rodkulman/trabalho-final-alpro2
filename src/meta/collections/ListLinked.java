@@ -32,7 +32,7 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	@Override
 	public void add(int index, T element)
 	{
-		Node<T> newNode = new Node<>(element);
+		LinkedNode<T> newNode = new LinkedNode<>(element);
 
 		if (isEmpty())
 		{
@@ -44,7 +44,7 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 		{
 			if (index < 0 || index > count) { throw new IndexOutOfBoundsException(); }
 
-			Node<T> aux = head;
+			LinkedNode<T> aux = head;
 
 			//search for the node an index before the specified
 			for (int i = 0; i < index - 1; i++)
@@ -71,7 +71,7 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	{
 		if (index < 0 || index >= count) { throw new IndexOutOfBoundsException(); }
 
-		Node<T> aux = head;
+		LinkedNode<T> aux = head;
 
 		for (int i = 0; i < index; i++)
 		{
@@ -90,7 +90,7 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	@Override
 	public int indexOf(T e)
 	{
-		Node<T> aux = head;
+		LinkedNode<T> aux = head;
 		int index = 0;
 
 		while (aux != null)
@@ -113,7 +113,7 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	{
 		if (index < 0 || index >= count) { throw new IndexOutOfBoundsException(); }
 
-		Node<T> aux = head;
+		LinkedNode<T> aux = head;
 
 		for (int i = 0; i < index; i++)
 		{
@@ -131,8 +131,8 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	@Override
 	public boolean remove(T e)
 	{
-		Node<T> aux = head;
-		Node<T> prev = null;
+		LinkedNode<T> aux = head;
+		LinkedNode<T> prev = null;
 
 		while (aux != null)
 		{
@@ -159,8 +159,8 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	{
 		if (index < 0 || index >= count) { throw new IndexOutOfBoundsException(); }
 
-		Node<T> aux = head;
-		Node<T> prev = null;
+		LinkedNode<T> aux = head;
+		LinkedNode<T> prev = null;
 
 		for (int i = 0; i < index; i++)
 		{
@@ -178,7 +178,7 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	 * @param remove Node to be removed.
 	 * @param prev Node previous to the one being removed.
 	 */
-	private void removeNode(Node<T> remove, Node<T> prev)
+	private void removeNode(LinkedNode<T> remove, LinkedNode<T> prev)
 	{
 		if (prev == null) // removing first
 		{

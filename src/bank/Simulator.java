@@ -49,6 +49,9 @@ public class Simulator extends BaseSimulator
 		createCashiers(managerNumber, priorityManagerNumber, true);
 		
 		rnd = new Random();
+		
+		cashierQueue = new bank.services.PriorityQueue();
+		managerQueue = new bank.services.PriorityQueue();
 	}
 	
 	/**
@@ -80,19 +83,39 @@ public class Simulator extends BaseSimulator
 		 * From then, they will be served according to their priorities. 
 		 */
 		
-		if (clientGenerator.generate(time, XMLConfig.getDouble("priorityProbality")))
+		if (clientGenerator.generate(time, XMLConfig.getDouble("priorityProbality"), XMLConfig.getDouble("managerProbality")))
 		{
 			Client c = clientGenerator.getGeneratedClient();			
 			clientQueue.enqueue(c);
 		}
 		
-		if (cashiers.isAnyEmpty())
+		// checks if there is any cashier free and if there is any client
+		if (cashiers.isAnyEmpty() && !clientQueue.isEmpty())
 		{
+			// gather all of them in their respective queues
+			while (!clientQueue.isEmpty())
+			{
+				Client c = clientQueue.dequeue();
+				(c.isLookingForManager() ? managerQueue : cashierQueue).enqueue(c);
+			}
+			
 			
 		}
-		else
+		
+		// iterates all the cashiers, decreasing serving time for each occupied cashier
+		for (Cashier c : cashiers)
 		{
-			
+			if (!c.isEmpty())
+			{
+				if (c.getCurrentClient().getRemainigTime() == 0)
+				{
+					c.endServing();
+				}
+				else
+				{
+					c.getCurrentClient().decreaseRemaingTime();
+				}
+			}
 		}
 	}
 	

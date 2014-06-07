@@ -8,13 +8,13 @@ import java.util.Iterator;
  */
 class LinkedIterator<T> implements Iterator<T>
 {
-	private Node<T> current;
+	private LinkedNode<T> current;
 
 	/**
 	 * Creates a new instance of this class with a node to start.
 	 * @param head First node in the linked list.
 	 */
-	public LinkedIterator(Node<T> head)
+	public LinkedIterator(LinkedNode<T> head)
 	{
 		current = head;
 	}

@@ -1,5 +1,7 @@
 package services;
 
+import java.util.Iterator;
+
 import meta.collections.ListLinked;
 
 /**
@@ -7,7 +9,7 @@ import meta.collections.ListLinked;
  * @author rodkulman@gmail.com
  *
  */
-public class Cashiers
+public class Cashiers implements Iterable<Cashier>
 {
 	/**
 	 * The list of cashiers.
@@ -52,5 +54,11 @@ public class Cashiers
 		}
 		
 		return null;
+	}
+
+	@Override
+	public Iterator<Cashier> iterator() 
+	{
+		return cashiers.iterator();
 	}
 }

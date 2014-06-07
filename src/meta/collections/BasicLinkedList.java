@@ -20,11 +20,11 @@ abstract class BasicLinkedList<T> implements IList, Iterable<T>
 	/**
 	 * First element in the list.
 	 */
-	protected Node<T> head;
+	protected LinkedNode<T> head;
 	/**
 	 * Last element in the list.
 	 */
-	protected Node<T> tail;
+	protected LinkedNode<T> tail;
 
 	/**
 	 * Returns the number of elements currently in the list.
