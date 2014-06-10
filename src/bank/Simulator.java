@@ -24,6 +24,16 @@ public class Simulator extends BaseSimulator
 	 */
 	IQueue<Client> managerQueue;
 	
+	/**
+	 * The priority client queue for cashier.
+	 */
+	IQueue<Client> pCashierQueue;
+	
+	/**
+	 * The priority client queue for managers.
+	 */
+	IQueue<Client> pManagerQueue;
+	
 	/*
 	 * The inherited clientQueue object will be used as the initial queue
 	 */
@@ -50,8 +60,31 @@ public class Simulator extends BaseSimulator
 		
 		rnd = new Random();
 		
-		cashierQueue = new bank.services.PriorityQueue();
-		managerQueue = new bank.services.PriorityQueue();
+		//cashierQueue = new bank.services.PriorityQueue();
+		//managerQueue = new bank.services.PriorityQueue();
+		cashierQueue = new QueueLinked<>();
+		managerQueue = new QueueLinked<>();
+		pCashierQueue = new QueueLinked<>();
+		pManagerQueue = new QueueLinked<>();
+	}
+	
+	/**
+	 * Gets the correct queue for the client
+	 * @param c the client whose correct queue will be searched
+	 * @return the correct queue for that client
+	 */
+	private IQueue<Client> getCorrectQueue(Client c)
+	{
+		if (c.requiresPriority())
+		{
+			if (c.isLookingForManager()) { return pManagerQueue; }
+			else { return pCashierQueue; }
+		}
+		else
+		{
+			if (c.isLookingForManager()) { return managerQueue; }
+			else { return cashierQueue; }
+		}
 	}
 	
 	/**
@@ -96,10 +129,36 @@ public class Simulator extends BaseSimulator
 			while (!clientQueue.isEmpty())
 			{
 				Client c = clientQueue.dequeue();
-				(c.isLookingForManager() ? managerQueue : cashierQueue).enqueue(c);
+				getCorrectQueue(c).enqueue(c);
 			}
+
+			/*
+			 * Dequeues the clients into cashiers
+			 */
 			
+			// empty, regular, non-priority
+			dequeueClients(cashierQueue, new IQueryable<Cashier>() {
+				public boolean where(Cashier item) 
+				{ return item.isEmpty() && !item.isManager() && !item.isPriority(); } 
+			});
 			
+			// empty, manager, non-priority
+			dequeueClients(managerQueue, new IQueryable<Cashier>() {
+				public boolean where(Cashier item) 
+				{ return item.isEmpty() && item.isManager() && !item.isPriority(); } 
+			});
+			
+			// empty, regular, priority
+			dequeueClients(pCashierQueue, new IQueryable<Cashier>() {
+				public boolean where(Cashier item) 
+				{ return item.isEmpty() && !item.isManager() && item.isPriority(); } 
+			});
+			
+			// empty, manager, priority
+			dequeueClients(pManagerQueue, new IQueryable<Cashier>() {
+				public boolean where(Cashier item) 
+				{ return item.isEmpty() && item.isManager() && item.isPriority(); } 
+			});
 		}
 		
 		// iterates all the cashiers, decreasing serving time for each occupied cashier
@@ -116,6 +175,19 @@ public class Simulator extends BaseSimulator
 					c.getCurrentClient().decreaseRemaingTime();
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Dequeues client into cashiers
+	 * @param queue The queue being dequeued
+	 * @param query The where provider for filtering the cashiers
+	 */
+	private void dequeueClients(IQueue<Client> queue, IQueryable<Cashier> query)
+	{
+		for (Cashier c : cashiers.where(query))
+		{
+			c.serveNewClient(queue.dequeue());
 		}
 	}
 	

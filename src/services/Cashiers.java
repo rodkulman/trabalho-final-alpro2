@@ -2,6 +2,7 @@ package services;
 
 import java.util.Iterator;
 
+import meta.collections.IQueryable;
 import meta.collections.ListLinked;
 
 /**
@@ -43,17 +44,47 @@ public class Cashiers implements Iterable<Cashier>
 		return false;
 	}
 	
-	public Cashier getFirstEmpty(boolean manager, boolean priority)
+	/**
+	 * Iterates through the list looking for cashier with the specified parameter
+	 * @param query Allows for custom filtering
+	 * @return An Iterable that iterates though the list looking for cashier with the specified parameters
+	 */
+	public Iterable<Cashier> where(final IQueryable<Cashier> query)
 	{
-		for (Cashier c : cashiers)
+		return new Iterable<Cashier>() 
 		{
-			if (c.isEmpty() && c.isManager() == manager && c.isPriority() == priority)
+			@Override
+			public Iterator<Cashier> iterator() 
 			{
-				return c;
+				return new Iterator<Cashier>()
+				{
+					int index = 0;
+					
+					@Override
+					public void remove() { }
+					
+					@Override
+					public Cashier next() 
+					{
+						return cashiers.get(index);
+					}
+					
+					@Override
+					public boolean hasNext() 
+					{
+						for (; index < cashiers.size(); index++)
+						{
+							if (query.where(cashiers.get(index)))
+							{
+								return true;
+							}
+						}
+						
+						return false;
+					}
+				};
 			}
-		}
-		
-		return null;
+		};
 	}
 
 	@Override
