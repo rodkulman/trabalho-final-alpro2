@@ -185,8 +185,14 @@ public class Simulator extends BaseSimulator
 	 */
 	private void dequeueClients(IQueue<Client> queue, IQueryable<Cashier> query)
 	{
+		// it isn't checked whether the queue is not empty before calling this method.
+		if (queue.isEmpty()) { return; }
+		
 		for (Cashier c : cashiers.where(query))
 		{
+			//the queue can become empty during the dequeuing
+			if (queue.isEmpty()) { return; }
+			
 			c.serveNewClient(queue.dequeue());
 		}
 	}
