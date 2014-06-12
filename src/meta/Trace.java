@@ -1,5 +1,7 @@
 package meta;
 
+import java.io.IOException;
+
 /**
  * Designed to print trace logs.
  * 
@@ -7,7 +9,15 @@ package meta;
 */
 public final class Trace
 {
+	/**
+	 * Indicates whether it should trace messages.
+	 */
 	private static boolean tracing = false;
+	
+	/**
+	 * The output stream to log messages to.
+	 */
+	private static Appendable output = System.out;
 
 	/**
 	 * Gets whether tracing is enabled.
@@ -28,6 +38,32 @@ public final class Trace
 	}
 	
 	/**
+	 * Gets the output stream used to trace messages.
+	 * @return Returns the output stream used to trace messages.
+	 */
+	public static Appendable getOutput() 
+	{
+		return output;
+	}
+
+	/**
+	 * Sets the output stream used to trace messages;
+	 * @param output The output stream used to trace messages;
+	 */
+	public static void setOutput(Appendable output) 
+	{
+		Trace.output = output;
+	}
+	
+	/**
+	 * Sets the output stream to its default value.
+	 */
+	public static void resetOutput()
+	{
+		Trace.output = System.out;
+	}
+	
+	/**
 	 * Logs a message.
 	 * @param message Message to be logged.
 	 */
@@ -35,7 +71,14 @@ public final class Trace
 	{
 		if (!tracing) { return; }
 		
-		System.out.println(message);
+		try 
+		{
+			output.append(message +System.lineSeparator());
+		} 
+		catch (IOException e) 
+		{
+			// meanwhile does nothing
+		}
 	}
 	
 	/**
