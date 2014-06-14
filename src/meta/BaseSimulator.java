@@ -55,4 +55,28 @@ public abstract class BaseSimulator
 	 * Print the results of the simulation.
 	 */
 	public abstract void printResults();
+	
+	/**
+	 * Indicates the average time clients had to wait in queue.
+	 * @return A double value indicating the average waiting time.
+	 */
+	public abstract double getAverageWaitingTime();
+	
+	/**
+	 * Indicates the average size of the queue throughout the duration.
+	 * @return A double value indicating the average queue size.
+	 */
+	public abstract double getAverageQueueSize();
+	
+	/**
+	 * Indicates whether there are clients yet begin served.
+	 * @return Returns true if any cashier is occupied, otherwise false. 
+	 */
+	public abstract boolean getClientStillBeingServed();
+	
+	/**
+	 * Indicates the amount of clients yet waiting.
+	 * @return A integer value indicating the amount of clients yet in queue.
+	 */
+	public abstract int getClientsInQueue();
 }

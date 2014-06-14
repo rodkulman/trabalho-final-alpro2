@@ -1,15 +1,15 @@
 package bank.UI;
 
 /**
- * 
+ * Used to listen to appending messages.
  * @author rodkulman@gmail.com
- *
+ * 
  */
-public interface AppendableListener 
+public interface AppendableListener
 {
 	/**
-	 * 
-	 * @param args
+	 * Fired when a new value has been appended to the object.
+	 * @param args The message being appended.
 	 */
 	void Appended(String args);
 }

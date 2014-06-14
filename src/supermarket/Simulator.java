@@ -6,14 +6,15 @@ import meta.collections.*;
 
 /**
  * Defines the supermarket simulator.
- * @author rodkulman@gmail.com 
+ * 
+ * @author rodkulman@gmail.com
  */
 public class Simulator extends BaseSimulator
 {
 	/**
 	 * The cashier serving the clients.
 	 */
-	private Cashier cashier;	
+	private Cashier cashier;
 	/**
 	 * Calculates the average waiting time.
 	 */
@@ -25,33 +26,34 @@ public class Simulator extends BaseSimulator
 
 	/**
 	 * Initializes a new simulator, indicating whether it should trace.
+	 * 
 	 * @param trace
 	 */
 	public Simulator()
-	{		
+	{
 		clear();
 	}
 
 	@Override
 	protected void simulation(int time)
 	{
-		//check if a new client arrived.
+		// check if a new client arrived.
 		if (clientGenerator.generate(time, 0.0, 0.0))
 		{
-			//if arrived, add to the cashier queue.
+			// if arrived, add to the cashier queue.
 			Client c = clientGenerator.getGeneratedClient();
 			clientQueue.enqueue(c);
 
 			Trace.log(time + ": cliente " + c.getID() + " (" + c.getRemainigTime() + " min) entra na fila - " + clientQueue.size() + " pessoa(s)");
 		}
 
-		//checks if the cashier is free.
+		// checks if the cashier is free.
 		if (cashier.isEmpty())
 		{
-			//if the cashier is free, checks if there is a client waiting
+			// if the cashier is free, checks if there is a client waiting
 			if (!clientQueue.isEmpty())
 			{
-				//gets the first client in the queue
+				// gets the first client in the queue
 				cashier.serveNewClient(clientQueue.dequeue());
 				watingTime.add(time - cashier.getCurrentClient().getArrival());
 
@@ -60,12 +62,13 @@ public class Simulator extends BaseSimulator
 		}
 		else
 		{
-			//if the cashier is busy, reduce the remaining time until it reaches 0
+			// if the cashier is busy, reduce the remaining time until it
+			// reaches 0
 			if (cashier.getCurrentClient().getRemainigTime() == 0)
 			{
 				Trace.log(time + ": cliente " + cashier.getCurrentClient().getID() + " deixa o caixa.");
 
-				//when it reaches 0, ends the service
+				// when it reaches 0, ends the service
 				cashier.endServing();
 			}
 			else
@@ -103,4 +106,29 @@ public class Simulator extends BaseSimulator
 		System.out.println("Tempo medio de espera:" + watingTime.getAverage());
 		System.out.println("Comprimento medio da fila:" + queueSize.getAverage());
 	}
+
+	@Override
+	public double getAverageWaitingTime()
+	{
+		return watingTime.getAverage();
+	}
+
+	@Override
+	public double getAverageQueueSize()
+	{
+		return queueSize.getAverage();
+	}
+
+	@Override
+	public boolean getClientStillBeingServed()
+	{
+		return cashier.getCurrentClient() != null;
+	}
+
+	@Override
+	public int getClientsInQueue()
+	{
+		return clientQueue.size();
+	}
+
 }

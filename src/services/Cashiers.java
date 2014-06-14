@@ -92,4 +92,21 @@ public class Cashiers implements Iterable<Cashier>
 	{
 		return cashiers.iterator();
 	}
+	
+	/**
+	 * Indicates whether there is any cashier serving a client.
+	 * @return True if any cashier is serving a client, otherwise false.
+	 */
+	public boolean isAnyOccupied()
+	{
+		for (Cashier c : this)
+		{
+			if (!c.isEmpty())
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
