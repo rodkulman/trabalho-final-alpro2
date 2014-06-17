@@ -43,6 +43,11 @@ public class Simulator extends BaseSimulator
 	 */
 	Random rnd;
 
+	/**
+	 * The class listening the events fired by this class;
+	 */
+	SimulatorListener listener;
+	
 	public Simulator()
 	{
 		cashiers = new Cashiers();
@@ -198,6 +203,11 @@ public class Simulator extends BaseSimulator
 			{
 				if (c.getCurrentClient().getRemainigTime() == 0)
 				{
+					if (listener != null)
+					{
+						listener.ClientServed(c.getCurrentClient(), time);
+					}
+					
 					c.endServing();
 				}
 				else
@@ -243,6 +253,11 @@ public class Simulator extends BaseSimulator
 
 	}
 
+	public void addListener(SimulatorListener listener)
+	{
+		this.listener = listener;
+	}
+	
 	@Override
 	public double getAverageWaitingTime()
 	{

@@ -2,6 +2,8 @@ package bank.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -10,6 +12,11 @@ import meta.*;
 import meta.collections.*;
 import bank.*;
 
+import org.jfree.chart.*;
+import org.jfree.data.xy.*;
+
+import services.Client;
+
 /**
  * The UI for the bank simulator app.
  * 
@@ -17,7 +24,7 @@ import bank.*;
  * 
  */
 
-public class BankFrame extends JFrame implements AppendableListener
+public class BankFrame extends JFrame implements AppendableListener, SimulatorListener
 {
 
 	/**
@@ -31,14 +38,23 @@ public class BankFrame extends JFrame implements AppendableListener
 	 */
 	private UILogger logger;
 
+	/**
+	 * Stores the log messages received.
+	 */
 	private ListLinked<String> logs;
 
+	/**
+	 * The bank simulator class;
+	 */
 	private Simulator simulator;
 
 	// Window components
 
 	JButton btnRunSimulator;
 	JList<String> lstLogs;
+	JFreeChart chart;
+	ChartPanel chartPanel;
+	DefaultXYDataset dsClientsTime;
 
 	// End of window components
 
@@ -57,10 +73,11 @@ public class BankFrame extends JFrame implements AppendableListener
 
 		btnRunSimulator = new JButton("Run Simulator");
 		btnRunSimulator.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnRunSimulator.setBounds(269, 204, 121, 46);
+		btnRunSimulator.setBounds(303, 205, 121, 46);
 		btnRunSimulator.addActionListener(btnRunSimulator_Click());
 		contentPane.setLayout(null);
 
+		logs = new ListLinked<>();
 		lstLogs = new JList<>();
 		lstLogs.setModel(new AbstractListModel<String>()
 		{
@@ -79,8 +96,16 @@ public class BankFrame extends JFrame implements AppendableListener
 		lstLogs.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lstLogs.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lstLogs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		lstLogs.setBounds(155, 10, 129, 122);
+		lstLogs.setBounds(295, 10, 129, 122);
+		
+		dsClientsTime = new DefaultXYDataset();
 
+		chart = ChartFactory.createXYLineChart("Clients Served Over Time", "Time", "Clients", dsClientsTime);
+		chartPanel = new ChartPanel(chart);
+		chartPanel.setSize(275, 241);
+		chartPanel.setLocation(10, 10);
+		
+		contentPane.add(chartPanel);
 		contentPane.add(lstLogs);
 		contentPane.add(btnRunSimulator);
 
@@ -121,4 +146,17 @@ public class BankFrame extends JFrame implements AppendableListener
 		};
 	}
 
+	MatrixArray currentSeries = new MatrixArray();
+	
+	@Override
+	public void ClientServed(Client c, int time) 
+	{
+		currentSeries.set(1, 1, time);
+	}
+
+	@Override
+	public void SimulationEnded() 
+	{
+		dsClientsTime.addSeries("Simulation 1", currentSeries.getData());
+	}
 }
