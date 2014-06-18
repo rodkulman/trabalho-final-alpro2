@@ -2,8 +2,6 @@ package bank.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -13,9 +11,11 @@ import meta.collections.*;
 import bank.*;
 
 import org.jfree.chart.*;
-import org.jfree.data.xy.*;
+import org.jfree.data.category.*;
+import org.jfree.data.general.*;
+import org.jfree.chart.plot.*;
 
-import services.Client;
+import services.*;
 
 /**
  * The UI for the bank simulator app.
@@ -52,9 +52,12 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 	JButton btnRunSimulator;
 	JList<String> lstLogs;
-	JFreeChart chart;
-	ChartPanel chartPanel;
-	DefaultXYDataset dsClientsTime;
+	JFreeChart clientChart;
+	ChartPanel clientChartPanel;
+	DefaultPieDataset dsClients;
+	JFreeChart clientTimeChart;
+	ChartPanel clientTimeChartPanel;
+	DefaultCategoryDataset dsClientsTime;
 
 	// End of window components
 
@@ -63,22 +66,20 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	 */
 	public BankFrame()
 	{
+		setResizable(false);
 		setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		setTitle("Bank Agency Simulator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 786, 585);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-
-		btnRunSimulator = new JButton("Run Simulator");
-		btnRunSimulator.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnRunSimulator.setBounds(303, 205, 121, 46);
-		btnRunSimulator.addActionListener(btnRunSimulator_Click());
 		contentPane.setLayout(null);
 
 		logs = new ListLinked<>();
 		lstLogs = new JList<>();
+		lstLogs.setBackground(Color.LIGHT_GRAY);
 		lstLogs.setModel(new AbstractListModel<String>()
 		{
 			private static final long serialVersionUID = -6267293639226535378L;
@@ -96,18 +97,66 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		lstLogs.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lstLogs.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lstLogs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		lstLogs.setBounds(295, 10, 129, 122);
-		
-		dsClientsTime = new DefaultXYDataset();
+		lstLogs.setBounds(10, 36, 214, 411);
 
-		chart = ChartFactory.createXYLineChart("Clients Served Over Time", "Time", "Clients", dsClientsTime);
-		chartPanel = new ChartPanel(chart);
-		chartPanel.setSize(275, 241);
-		chartPanel.setLocation(10, 10);
+		// clients chart
+
+		dsClients = new DefaultPieDataset();
+		dsClients.setValue("Served", 0.0);
+		dsClients.setValue("Not Served", 0.0);
+
+		clientChart = ChartFactory.createPieChart("Clients Served", dsClients, false, true, false);
+		clientChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+		PiePlot clientPlot = (PiePlot) clientChart.getPlot();
+
+		clientPlot.setSectionPaint("Served", new Color(0x00, 0x00, 0x66));
+		clientPlot.setSectionPaint("Not Served", new Color(0xCC, 0x00, 0x00));
+
+		clientPlot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 12));
+
+		clientChartPanel = new ChartPanel(clientChart);
+		clientChartPanel.setSize(307, 239);
+		clientChartPanel.setLocation(234, 11);
+
+		// end clients chart
+
+		// clients over time chart
+
+		dsClientsTime = new DefaultCategoryDataset();
+
+		clientTimeChart = ChartFactory.createBarChart("Clients Served Over Time", "Simulations", "Clients", dsClientsTime, PlotOrientation.VERTICAL, false, true, false);
+		clientTimeChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
 		
-		contentPane.add(chartPanel);
+		CategoryPlot plot = (CategoryPlot) clientTimeChart.getPlot();
+		
+		plot.getDomainAxis().setLabelFont(new Font("Segoe UI", Font.BOLD, 14));
+		plot.getRangeAxis().setLabelFont(new Font("Segoe UI", Font.BOLD, 14));
+
+		clientTimeChartPanel = new ChartPanel(clientTimeChart);
+		clientTimeChartPanel.setSize(462, 186);
+		clientTimeChartPanel.setLocation(234, 261);
+
+		// end clients over time chart
+
+		// btnRunSimulator
+
+		btnRunSimulator = new JButton("Run Simulator");
+		btnRunSimulator.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		btnRunSimulator.setBounds(649, 499, 121, 46);
+		btnRunSimulator.addActionListener(btnRunSimulator_Click());
+
+		// btnRunSimulator
+
+		contentPane.add(clientChartPanel);
+		contentPane.add(clientTimeChartPanel);
 		contentPane.add(lstLogs);
 		contentPane.add(btnRunSimulator);
+
+		JLabel lblNewLabel = new JLabel("Events");
+		lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		lblNewLabel.setBounds(85, 11, 62, 19);
+		contentPane.add(lblNewLabel);
 
 		logger = new UILogger();
 		logger.setAppendableListener(this);
@@ -117,11 +166,20 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	}
 
 	@Override
-	public void Appended(String logMessage)
+	public void Appended(final String logMessage)
 	{
 		// adds logs to the logging thing-y
-		logs.add(logMessage);
+		SwingUtilities.invokeLater(new Runnable()
+		{			
+			@Override
+			public void run()
+			{
+				logs.add(logMessage);
+			}
+		});		
 	}
+
+	BankFrame thisIntance = this;
 
 	private ActionListener btnRunSimulator_Click()
 	{
@@ -130,6 +188,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				dsClients.setValue("Served", 0.0);
+				dsClients.setValue("Not Served", 0.0);
+
 				// ran in another thread so the UI isn't looked.
 				Runnable thread = new Runnable()
 				{
@@ -137,6 +198,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 					public void run()
 					{
 						simulator = new Simulator();
+
+						simulator.addListener(thisIntance);
+
 						simulator.simulate();
 					}
 				};
@@ -146,17 +210,45 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		};
 	}
 
-	MatrixArray currentSeries = new MatrixArray();
-	
+	// listens to the simulator and
 	@Override
-	public void ClientServed(Client c, int time) 
+	public void ClientServed(final Client c, final int time)
 	{
-		currentSeries.set(1, 1, time);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				dsClients.setValue("Served", dsClients.getValue("Served").doubleValue() + 1);
+				dsClients.setValue("Not Served", dsClients.getValue("Not Served").doubleValue() - 1);
+			}
+		});
 	}
 
 	@Override
-	public void SimulationEnded() 
+	public void ClientArrived(final Client c, final int time)
 	{
-		dsClientsTime.addSeries("Simulation 1", currentSeries.getData());
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				dsClients.setValue("Not Served", dsClients.getValue("Not Served").doubleValue() + 1);
+			}
+		});
+	}
+
+	@Override
+	public void SimulationEnded()
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				double totalServed = dsClients.getValue("Served").doubleValue();
+				dsClientsTime.addValue(totalServed, "Simulation " + dsClientsTime.getRowCount(), "");
+			}
+		});
 	}
 }

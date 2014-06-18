@@ -7,6 +7,6 @@
 	<arrivalProbability>0.1</arrivalProbability>
 	<minServingTime>5</minServingTime>
 	<maxServingTime>10</maxServingTime>
-	<priorityProbality>0.2<priorityProbality>
-	<managerProbality>0.2<managerProbality>
+	<priorityProbality>0.2</priorityProbality>
+	<managerProbality>0.2</managerProbality>
 </config>

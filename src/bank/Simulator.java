@@ -43,11 +43,6 @@ public class Simulator extends BaseSimulator
 	 */
 	Random rnd;
 
-	/**
-	 * The class listening the events fired by this class;
-	 */
-	SimulatorListener listener;
-	
 	public Simulator()
 	{
 		cashiers = new Cashiers();
@@ -70,6 +65,8 @@ public class Simulator extends BaseSimulator
 		managerQueue = new QueueLinked<>();
 		pCashierQueue = new QueueLinked<>();
 		pManagerQueue = new QueueLinked<>();
+		
+		clientGenerator = new ClientGenerator(arrivalProbability);
 	}
 
 	/**
@@ -142,6 +139,9 @@ public class Simulator extends BaseSimulator
 		{
 			Client c = clientGenerator.getGeneratedClient();
 			clientQueue.enqueue(c);
+			
+			// warns the simulator that a new client arrived
+			onClientArrived(c, time);
 		}
 
 		// checks if there is any cashier free and if there is any client
@@ -203,11 +203,9 @@ public class Simulator extends BaseSimulator
 			{
 				if (c.getCurrentClient().getRemainigTime() == 0)
 				{
-					if (listener != null)
-					{
-						listener.ClientServed(c.getCurrentClient(), time);
-					}
-					
+					// warns the simulator a client a client has been served
+					onClientServed(c.getCurrentClient(), time);
+
 					c.endServing();
 				}
 				else
@@ -253,11 +251,6 @@ public class Simulator extends BaseSimulator
 
 	}
 
-	public void addListener(SimulatorListener listener)
-	{
-		this.listener = listener;
-	}
-	
 	@Override
 	public double getAverageWaitingTime()
 	{
