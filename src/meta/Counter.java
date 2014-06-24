@@ -2,8 +2,9 @@ package meta;
 
 /**
  * Defines a class to perform averages.
+ * 
  * @author rodkulman@gmail.com
- *
+ * 
  */
 public class Counter
 {
@@ -24,6 +25,7 @@ public class Counter
 
 	/**
 	 * Gets the current value.
+	 * 
 	 * @return The current value
 	 */
 	public double getValue()
@@ -33,6 +35,7 @@ public class Counter
 
 	/**
 	 * Gets the amount of times this instance added values.
+	 * 
 	 * @return The amount of times this instance added values.
 	 */
 	public int getQuantity()
@@ -42,7 +45,9 @@ public class Counter
 
 	/**
 	 * Adds to value and increases quantity by one.
-	 * @param d Value to be added.
+	 * 
+	 * @param d
+	 *            Value to be added.
 	 */
 	public void add(double d)
 	{
@@ -52,6 +57,7 @@ public class Counter
 
 	/**
 	 * Calculates the average for the current values.
+	 * 
 	 * @return The arithmetic average for the current values.
 	 */
 	public double getAverage()

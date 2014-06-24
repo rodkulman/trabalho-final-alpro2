@@ -4,8 +4,9 @@ import java.io.IOException;
 
 /**
  * Allows for logging into the UI.
+ * 
  * @author rodkulman@gmail.com
- *
+ * 
  */
 
 public class UILogger implements Appendable

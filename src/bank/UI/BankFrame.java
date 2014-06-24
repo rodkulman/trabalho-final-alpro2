@@ -127,9 +127,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		clientTimeChart = ChartFactory.createBarChart("Clients Served Over Time", "Simulations", "Clients", dsClientsTime, PlotOrientation.VERTICAL, false, true, false);
 		clientTimeChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
-		
+
 		CategoryPlot plot = (CategoryPlot) clientTimeChart.getPlot();
-		
+
 		plot.getDomainAxis().setLabelFont(new Font("Segoe UI", Font.BOLD, 14));
 		plot.getRangeAxis().setLabelFont(new Font("Segoe UI", Font.BOLD, 14));
 
@@ -170,13 +170,13 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	{
 		// adds logs to the logging thing-y
 		SwingUtilities.invokeLater(new Runnable()
-		{			
+		{
 			@Override
 			public void run()
 			{
 				logs.add(logMessage);
 			}
-		});		
+		});
 	}
 
 	BankFrame thisIntance = this;

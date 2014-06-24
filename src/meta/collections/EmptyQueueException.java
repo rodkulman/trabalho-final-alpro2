@@ -2,8 +2,9 @@ package meta.collections;
 
 /**
  * Occurs when a trying a dequeue/enqueue operation on a empty queue.
+ * 
  * @author rodkulman@gmail.com
- *
+ * 
  */
 public class EmptyQueueException extends RuntimeException
 {
@@ -17,6 +18,6 @@ public class EmptyQueueException extends RuntimeException
 	 */
 	public EmptyQueueException()
 	{
-	    super("The queue is empty.");
+		super("The queue is empty.");
 	}
 }

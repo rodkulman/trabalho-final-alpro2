@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 /**
  * Defines a common iterator for linked classes.
+ * 
  * @author rodkulman@gmail.com
  */
 class LinkedIterator<T> implements Iterator<T>
@@ -12,7 +13,9 @@ class LinkedIterator<T> implements Iterator<T>
 
 	/**
 	 * Creates a new instance of this class with a node to start.
-	 * @param head First node in the linked list.
+	 * 
+	 * @param head
+	 *            First node in the linked list.
 	 */
 	public LinkedIterator(LinkedNode<T> head)
 	{
@@ -27,7 +30,7 @@ class LinkedIterator<T> implements Iterator<T>
 	{
 		return current != null;
 	}
-	
+
 	/**
 	 * Retrieves the next element in the list.
 	 */
@@ -39,13 +42,13 @@ class LinkedIterator<T> implements Iterator<T>
 
 		return item;
 	}
-	
+
 	/**
 	 * Does nothing.
 	 */
 	@Override
 	public void remove()
 	{
-		
+
 	}
 }

@@ -56,13 +56,13 @@ public abstract class BaseSimulator
 		{
 			simulation(time);
 		}
-		
+
 		// warns the listener the simulation ended
 		onSimulationEnded();
 	}
 
 	// event firing
-	
+
 	protected void onClientServed(final Client c, final int time)
 	{
 		if (listener != null)
@@ -70,7 +70,7 @@ public abstract class BaseSimulator
 			listener.ClientServed(c, time);
 		}
 	}
-	
+
 	protected void onClientArrived(final Client c, final int time)
 	{
 		if (listener != null)
@@ -78,7 +78,7 @@ public abstract class BaseSimulator
 			listener.ClientArrived(c, time);
 		}
 	}
-	
+
 	protected void onSimulationEnded()
 	{
 		if (listener != null)
@@ -86,9 +86,9 @@ public abstract class BaseSimulator
 			listener.SimulationEnded();
 		}
 	}
-	
+
 	// end event firing
-	
+
 	/**
 	 * Calls the simulation
 	 * 

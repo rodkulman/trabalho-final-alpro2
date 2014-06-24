@@ -27,9 +27,9 @@ public final class App
 					BankFrame frame = new BankFrame();
 					frame.setVisible(true);
 				}
-				catch (Exception e)
+				catch (Exception ex)
 				{
-					e.printStackTrace();
+					Trace.log(ex);
 				}
 			}
 		});

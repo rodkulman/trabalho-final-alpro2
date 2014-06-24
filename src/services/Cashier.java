@@ -2,17 +2,18 @@ package services;
 
 /**
  * Defines a cashier serving a client.
+ * 
  * @author rodkulman@gmail.com
- *
+ * 
  */
 public class Cashier
 {
 	/**
 	 * The client current being served.
 	 */
-	private Client currentClient; 
+	private Client currentClient;
 	/**
-	 * Amount of clients served. 
+	 * Amount of clients served.
 	 */
 	private int served;
 
@@ -24,7 +25,7 @@ public class Cashier
 	 * Indicates whether this cashier is a manager.
 	 */
 	private final boolean manager;
-	
+
 	/**
 	 * Initializes a new instance with no client, and no clients served.
 	 */
@@ -32,11 +33,14 @@ public class Cashier
 	{
 		this(false, false);
 	}
-	
+
 	/**
 	 * Instances a cashier, determining priority and manager status.
-	 * @param priority Indicates the priority.
-	 * @param manager Indicates whether this cashier is a manager.
+	 * 
+	 * @param priority
+	 *            Indicates the priority.
+	 * @param manager
+	 *            Indicates whether this cashier is a manager.
 	 */
 	public Cashier(boolean priority, boolean manager)
 	{
@@ -45,28 +49,33 @@ public class Cashier
 		this.currentClient = null;
 		this.served = 0;
 	}
-	
+
 	/**
 	 * Indicates whether this cashier has priority.
+	 * 
 	 * @return True if this cashier has priority, otherwise false.
 	 */
-	public boolean isPriority() 
+	public boolean isPriority()
 	{
 		return priority;
 	}
-	
+
 	/**
 	 * Indicates whether this cashier is a manager.
-	 * @return True if this cashier is a actually a manager, false if is a regular cashier.
+	 * 
+	 * @return True if this cashier is a actually a manager, false if is a
+	 *         regular cashier.
 	 */
-	public boolean isManager() 
+	public boolean isManager()
 	{
 		return manager;
 	}
 
 	/**
 	 * Starts serving a new client.
-	 * @param c A new client to be served.
+	 * 
+	 * @param c
+	 *            A new client to be served.
 	 */
 	public void serveNewClient(Client c)
 	{
@@ -75,20 +84,22 @@ public class Cashier
 
 	/**
 	 * End the client service, and increase the served amount.
+	 * 
 	 * @return The served client.
 	 */
 	public Client endServing()
 	{
 		Client c = currentClient;
-		
+
 		currentClient = null;
 		served++;
-		
+
 		return c;
 	}
 
 	/**
 	 * Indicates whether the cashier is serving anyone.
+	 * 
 	 * @return True if there is a current client, otherwise false.
 	 */
 	public boolean isEmpty()
@@ -98,6 +109,7 @@ public class Cashier
 
 	/**
 	 * Gets the current client.
+	 * 
 	 * @return The current client. Null if there is none.
 	 */
 	public Client getCurrentClient()
@@ -107,6 +119,7 @@ public class Cashier
 
 	/**
 	 * The amount of clients served.
+	 * 
 	 * @return Returns the amount of clients served.
 	 */
 	public int getServed()

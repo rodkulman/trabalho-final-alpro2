@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 /**
  * Implements the basic behavior for linked lists.
+ * 
  * @author rodkulman@gmail.com
  */
 abstract class BasicLinkedList<T> implements IList, Iterable<T>
@@ -12,7 +13,7 @@ abstract class BasicLinkedList<T> implements IList, Iterable<T>
 	{
 		clear();
 	}
-	
+
 	/**
 	 * Number of elements current in the list.
 	 */
@@ -53,7 +54,7 @@ abstract class BasicLinkedList<T> implements IList, Iterable<T>
 		head = tail = null;
 		count = 0;
 	}
-	
+
 	/**
 	 * Returns the iterator for this list.
 	 */

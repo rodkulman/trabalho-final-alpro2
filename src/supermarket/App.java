@@ -4,6 +4,7 @@ import meta.Trace;
 
 /**
  * Program initializer
+ * 
  * @author rodkulman@gmail.com
  */
 public final class App

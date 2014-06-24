@@ -2,6 +2,7 @@ package meta.collections;
 
 /**
  * Defines a list (random access) with linked nodes.
+ * 
  * @author rodkulman@gmail.com
  */
 public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
@@ -13,21 +14,26 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	{
 		super();
 	}
-	
+
 	/**
 	 * Adds an element to the end of the list.
-	 * @param e Element to be added.
+	 * 
+	 * @param e
+	 *            Element to be added.
 	 */
 	@Override
 	public void add(T e)
 	{
 		add(count, e);
 	}
-	
+
 	/**
 	 * Adds a new element at a specified index.
-	 * @param index Index to insert the element at.
-	 * @param element Element to be inserted.
+	 * 
+	 * @param index
+	 *            Index to insert the element at.
+	 * @param element
+	 *            Element to be inserted.
 	 */
 	@Override
 	public void add(int index, T element)
@@ -36,7 +42,7 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 		if (isEmpty())
 		{
-			//empty list, this new node is both head and tail
+			// empty list, this new node is both head and tail
 			head = newNode;
 			tail = newNode;
 		}
@@ -46,15 +52,15 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 			LinkedNode<T> aux = head;
 
-			//search for the node an index before the specified
+			// search for the node an index before the specified
 			for (int i = 0; i < index - 1; i++)
 			{
 				aux = aux.next;
 			}
 
-			//the new node's next is set for the node at the specified index
+			// the new node's next is set for the node at the specified index
 			newNode.next = aux.next;
-			//newNode becomes the one at the specified index.
+			// newNode becomes the one at the specified index.
 			aux.next = newNode;
 		}
 
@@ -63,7 +69,9 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 	/**
 	 * Returns the element at the specified index.
-	 * @param index Index to search for the element.
+	 * 
+	 * @param index
+	 *            Index to search for the element.
 	 * @return The element at the specified index.
 	 */
 	@Override
@@ -84,8 +92,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 	/**
 	 * Determines the index of a certain element.
-	 * @param element Element to search for.
-	 * @return The index of the element. If the element isn't within the list, returns -1.
+	 * 
+	 * @param element
+	 *            Element to search for.
+	 * @return The index of the element. If the element isn't within the list,
+	 *         returns -1.
 	 */
 	@Override
 	public int indexOf(T e)
@@ -105,8 +116,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 	/**
 	 * Replaces a element at the specified index.
-	 * @param index Index to be replaced.
-	 * @param element Element which will replace the current one.
+	 * 
+	 * @param index
+	 *            Index to be replaced.
+	 * @param element
+	 *            Element which will replace the current one.
 	 */
 	@Override
 	public void set(int index, T element)
@@ -125,7 +139,9 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 	/**
 	 * Removes the specified element.
-	 * @param element Element to be removed. 
+	 * 
+	 * @param element
+	 *            Element to be removed.
 	 * @return True if removed. False if the element doesn't exist in the list.
 	 */
 	@Override
@@ -151,7 +167,9 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 	/**
 	 * Removes a element at the specified index.
-	 * @param index Index to search the element for.
+	 * 
+	 * @param index
+	 *            Index to search the element for.
 	 * @return The element which was removed.
 	 */
 	@Override
@@ -175,8 +193,11 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 	/**
 	 * Removes the specified node and corrects the missing link issue.
-	 * @param remove Node to be removed.
-	 * @param prev Node previous to the one being removed.
+	 * 
+	 * @param remove
+	 *            Node to be removed.
+	 * @param prev
+	 *            Node previous to the one being removed.
 	 */
 	private void removeNode(LinkedNode<T> remove, LinkedNode<T> prev)
 	{
@@ -198,7 +219,9 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 
 	/**
 	 * Determines if a certain element is within the list.
-	 * @param element Element to search for.
+	 * 
+	 * @param element
+	 *            Element to search for.
 	 * @return True if the element is within the list, otherwise false.
 	 */
 	@Override

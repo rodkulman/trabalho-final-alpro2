@@ -7,6 +7,12 @@ import io.XMLConfig;
 import meta.*;
 import meta.collections.*;
 
+/**
+ * Simulates a bank agency queue.
+ * 
+ * @author rodkulman@gmail.com
+ * 
+ */
 public class Simulator extends BaseSimulator
 {
 	/**
@@ -65,7 +71,7 @@ public class Simulator extends BaseSimulator
 		managerQueue = new QueueLinked<>();
 		pCashierQueue = new QueueLinked<>();
 		pManagerQueue = new QueueLinked<>();
-		
+
 		clientGenerator = new ClientGenerator(arrivalProbability);
 	}
 
@@ -139,7 +145,7 @@ public class Simulator extends BaseSimulator
 		{
 			Client c = clientGenerator.getGeneratedClient();
 			clientQueue.enqueue(c);
-			
+
 			// warns the simulator that a new client arrived
 			onClientArrived(c, time);
 		}
