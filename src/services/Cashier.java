@@ -77,8 +77,13 @@ public class Cashier
 	 * @param c
 	 *            A new client to be served.
 	 */
-	public void serveNewClient(Client c)
+	public void serveNewClient(Client c) throws Exception
 	{
+		if (currentClient != null)
+		{
+			throw new Exception("Cashier is already serving a client.");
+		}
+		
 		currentClient = c;
 	}
 

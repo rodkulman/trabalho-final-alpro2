@@ -54,7 +54,16 @@ public class Simulator extends BaseSimulator
 			if (!clientQueue.isEmpty())
 			{
 				// gets the first client in the queue
-				cashier.serveNewClient(clientQueue.dequeue());
+				try
+				{
+					cashier.serveNewClient(clientQueue.dequeue());
+				}
+				catch (Exception ex)
+				{
+					Trace.log(ex);
+					return;
+				}
+				
 				watingTime.add(time - cashier.getCurrentClient().getArrival());
 
 				Trace.log(time + ": cliente " + cashier.getCurrentClient().getID() + " chega ao caixa.");

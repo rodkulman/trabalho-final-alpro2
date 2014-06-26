@@ -145,6 +145,8 @@ public class Simulator extends BaseSimulator
 		{
 			Client c = clientGenerator.getGeneratedClient();
 			clientQueue.enqueue(c);
+			
+			Trace.log("%s: Client %s arrived.", time, c.getID());
 
 			// warns the simulator that a new client arrived
 			onClientArrived(c, time);
@@ -212,6 +214,8 @@ public class Simulator extends BaseSimulator
 					// warns the simulator a client a client has been served
 					onClientServed(c.getCurrentClient(), time);
 
+					Trace.log("%s: Client %s served.", time, c.getCurrentClient().getID());
+										
 					c.endServing();
 				}
 				else
@@ -241,7 +245,15 @@ public class Simulator extends BaseSimulator
 			// the queue can become empty during the dequeuing
 			if (queue.isEmpty()) { return; }
 
+			try
+			{
 			c.serveNewClient(queue.dequeue());
+			}
+			catch (Exception ex)
+			{
+				Trace.log(ex);
+				return;
+			}
 		}
 	}
 
