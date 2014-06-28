@@ -6,7 +6,7 @@ package meta.collections;
  * @author rodkulman@gmail.com
  * 
  */
-public interface IList
+public interface IList<T> extends Iterable<T> 
 {
 	/**
 	 * Used to retrieve the size of a list.

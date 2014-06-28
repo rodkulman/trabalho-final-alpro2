@@ -9,12 +9,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import meta.*;
-import meta.collections.*;
 import bank.*;
 
 import org.jfree.chart.*;
-import org.jfree.data.category.*;
-import org.jfree.data.general.*;
 import org.jfree.chart.plot.*;
 
 import services.*;
@@ -41,11 +38,6 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	private UILogger logger;
 
 	/**
-	 * Stores the log messages received.
-	 */
-	private ListLinked<String> logs;
-
-	/**
 	 * The bank simulator class;
 	 */
 	private Simulator simulator;
@@ -53,21 +45,24 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	// Window components
 
 	JButton btnRunSimulator;
+	
 	JList<String> lstLogs;
+	DefaultListModel<String> listModel;
+	
 	JFreeChart clientChart;
 	ChartPanel clientChartPanel;
-	DefaultPieDataset dsClients;
-	JFreeChart clientTimeChart;
-	ChartPanel clientTimeChartPanel;
-	DefaultCategoryDataset dsClientsTime;
+	CategoryBasedPieDataset dsClients;
 
 	JFreeChart cashiersChart;
 	ChartPanel cashiersChartPanel;
-	DefaultPieDataset dsCashiers;
+	CategoryBasedPieDataset dsCashiers;
 
+	JFreeChart clientsByCashierChart;
+	ChartPanel clientsByCashierChartPanel;
+	CategoryBasedPieDataset dsClientsByCashier;
+	
 	JTabbedPane tabs;
 	JPanel currentSimulationTab;
-	JPanel allSimulationsTab;
 	JPanel eventsTab;
 	JPanel configuationTab;
 
@@ -92,34 +87,22 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		contentPane.setLayout(null);
 
 		// lstLogs
-
-		logs = new ListLinked<>();
-		lstLogs = new JList<>();
+		
+		listModel = new DefaultListModel<>();
+		
+		lstLogs = new JList<>(listModel);
 		lstLogs.setLocation(0, 0);
 		lstLogs.setSize(511, 364);
 		lstLogs.setBackground(Color.LIGHT_GRAY);
 		lstLogs.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lstLogs.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lstLogs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		lstLogs.setModel(new AbstractListModel<String>()
-		{
-			private static final long serialVersionUID = -6267293639226535378L;
-
-			public int getSize()
-			{
-				return logs.size();
-			}
-
-			public String getElementAt(int index)
-			{
-				return logs.get(index);
-			}
-		});
+		
 		// clients chart
 
-		dsClients = new DefaultPieDataset();
-		dsClients.setValue("Served", 0.0);
-		dsClients.setValue("Not Served", 0.0);
+		dsClients = new CategoryBasedPieDataset();
+		dsClients.addNewCategory("Served");
+		dsClients.addNewCategory("Not Served");
 
 		clientChart = ChartFactory.createPieChart("Clients Served", dsClients, true, true, false);
 		clientChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -133,26 +116,11 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		clientPlot.setLabelGenerator(new PieSectionNumericLabelGenerator());
 
 		clientChartPanel = new ChartPanel(clientChart);
-		clientChartPanel.setBounds(10, 11, 400, 246);
-
-		// clients over time chart
-
-		dsClientsTime = new DefaultCategoryDataset();
-
-		clientTimeChart = ChartFactory.createBarChart("Clients Served Over Time", "Simulations", "Clients", dsClientsTime, PlotOrientation.VERTICAL, false, true, false);
-		clientTimeChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
-
-		CategoryPlot plot = (CategoryPlot) clientTimeChart.getPlot();
-
-		plot.getDomainAxis().setLabelFont(new Font("Segoe UI", Font.BOLD, 14));
-		plot.getRangeAxis().setLabelFont(new Font("Segoe UI", Font.BOLD, 14));
-
-		clientTimeChartPanel = new ChartPanel(clientTimeChart);
-		clientTimeChartPanel.setBounds(10, 11, 511, 309);
+		clientChartPanel.setBounds(10, 11, 379, 246);
 
 		// cashiers chart
 
-		dsCashiers = new DefaultPieDataset();
+		dsCashiers = new CategoryBasedPieDataset();
 		dsCashiers.setValue("Regulars", XMLConfig.getDouble("cashierNumber"));
 		dsCashiers.setValue("Priorities", XMLConfig.getDouble("priorityCashierNumber"));
 		dsCashiers.setValue("Managers", XMLConfig.getDouble("managerNumber"));
@@ -171,6 +139,30 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		cashierPlot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 12));
 		cashierPlot.setLabelGenerator(new PieSectionNumericLabelGenerator());
 
+		// clients by cashier chart
+		
+		dsClientsByCashier = new CategoryBasedPieDataset();
+		dsClientsByCashier.addNewCategory("Regulars");
+		dsClientsByCashier.addNewCategory("Priorities");
+		dsClientsByCashier.addNewCategory("Managers");
+		dsClientsByCashier.addNewCategory("Priority Managers");
+
+		clientsByCashierChart = ChartFactory.createPieChart("Clients By Cashiers", dsClientsByCashier, true, true, false);
+		clientsByCashierChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+		PiePlot clientsByCashierPlot = (PiePlot) clientsByCashierChart.getPlot();
+
+		clientsByCashierPlot.setSectionPaint("Regulars", new Color(0x00, 0x00, 0x66));
+		clientsByCashierPlot.setSectionPaint("Priorities", new Color(0xCC, 0x00, 0x00));
+		clientsByCashierPlot.setSectionPaint("Managers", new Color(0x00, 0x66, 0x00));
+		clientsByCashierPlot.setSectionPaint("Priority Managers", new Color(0xCC, 0xCC, 0x00));
+
+		clientsByCashierPlot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 12));
+		clientsByCashierPlot.setLabelGenerator(new PieSectionNumericLabelGenerator());
+		
+		clientsByCashierChartPanel = new ChartPanel(clientsByCashierChart);
+		clientsByCashierChartPanel.setBounds(399, 11, 346, 246);
+		
 		// btnRunSimulator
 
 		btnRunSimulator = new JButton("Run Simulator");
@@ -186,12 +178,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		currentSimulationTab.setLayout(null);
 
 		currentSimulationTab.add(clientChartPanel);
-
-		allSimulationsTab = new JPanel();
-		allSimulationsTab.setBackground(Color.WHITE);
-		allSimulationsTab.setLayout(null);
-
-		allSimulationsTab.add(clientTimeChartPanel);
+		currentSimulationTab.add(clientsByCashierChartPanel);
 
 		eventsTab = new JPanel();
 		eventsTab.setBackground(Color.WHITE);
@@ -199,7 +186,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		JScrollPane scrollPane = new JScrollPane(lstLogs);
 		scrollPane.setBounds(10, 11, 511, 364);
-		scrollPane.setLayout(null);
+		
 		eventsTab.add(scrollPane);
 
 		// tabs
@@ -232,7 +219,6 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		txtDuration.setColumns(10);
 		txtDuration.setText(XMLConfig.get("duration"));
 		tabs.addTab("Current Simulation", currentSimulationTab);
-		tabs.addTab("All Simulations", allSimulationsTab);
 		tabs.addTab("Simulation Events", eventsTab);
 
 		contentPane.add(tabs);
@@ -255,7 +241,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void run()
 			{
-				logs.add(logMessage);
+				listModel.addElement(logMessage);
 			}
 		});
 	}
@@ -270,8 +256,11 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				dsClients.setValue("Served", 0.0);
-				dsClients.setValue("Not Served", 0.0);
+				//dsClients.setValue("Served", 0.0);
+				//dsClients.setValue("Not Served", 0.0);
+				
+				dsClients.clearValues();
+				dsClientsByCashier.clearValues();
 
 				btnRunSimulator.setEnabled(false);
 
@@ -303,8 +292,31 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void run()
 			{
-				dsClients.setValue("Served", dsClients.getValue("Served").doubleValue() + 1);
-				dsClients.setValue("Not Served", dsClients.getValue("Not Served").doubleValue() - 1);
+				dsClients.increaseCategory("Served");
+				dsClients.decreaseCategory("Not Served");
+				
+				if (c.isLookingForManager()) 
+				{
+					if (c.requiresPriority())
+					{
+						dsClientsByCashier.increaseCategory("Priority Managers");
+					}
+					else
+					{
+						dsClientsByCashier.increaseCategory("Managers");
+					}
+				}
+				else
+				{
+					if (c.requiresPriority())
+					{
+						dsClientsByCashier.increaseCategory("Priorities");
+					}
+					else
+					{
+						dsClientsByCashier.increaseCategory("Regulars");
+					}
+				}
 			}
 		});
 	}
@@ -317,7 +329,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void run()
 			{
-				dsClients.setValue("Not Served", dsClients.getValue("Not Served").doubleValue() + 1);
+				dsClients.increaseCategory("Not Served");
 			}
 		});
 	}
@@ -330,9 +342,6 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void run()
 			{
-				double totalServed = dsClients.getValue("Served").doubleValue();
-				dsClientsTime.addValue(totalServed, "Simulation " + dsClientsTime.getRowCount(), "");
-
 				btnRunSimulator.setEnabled(true);
 			}
 		});

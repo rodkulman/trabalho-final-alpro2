@@ -6,7 +6,7 @@ package meta.collections;
  * @author rodkulman@gmail.com
  * 
  */
-public interface IQueue<T> extends IList
+public interface IQueue<T> extends IList<T>
 {
 	/**
 	 * Returns the first element of the queue.

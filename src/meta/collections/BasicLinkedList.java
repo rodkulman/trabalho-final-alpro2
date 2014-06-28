@@ -7,7 +7,7 @@ import java.util.Iterator;
  * 
  * @author rodkulman@gmail.com
  */
-abstract class BasicLinkedList<T> implements IList, Iterable<T>
+abstract class BasicLinkedList<T> implements IList<T>
 {
 	protected BasicLinkedList()
 	{

@@ -6,7 +6,7 @@ package meta.collections;
  * @author rodkulman@gmail.com
  * 
  */
-public interface IListLinked<T> extends IList
+public interface IListLinked<T> extends IList<T>
 {
 	/**
 	 * Adds a new element at a specified index.
