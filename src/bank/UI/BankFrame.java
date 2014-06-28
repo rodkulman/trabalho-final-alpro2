@@ -12,7 +12,6 @@ import meta.*;
 import bank.*;
 
 import org.jfree.chart.*;
-import org.jfree.chart.plot.*;
 
 import services.*;
 
@@ -44,42 +43,52 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 	// Window components
 
-	JButton btnRunSimulator;
+	private JButton btnRunSimulator;
 	
-	JList<String> lstLogs;
-	DefaultListModel<String> listModel;
+	private JList<String> lstLogs;
+	private DefaultListModel<String> listModel;
 	
-	JFreeChart clientChart;
-	ChartPanel clientChartPanel;
-	CategoryBasedPieDataset dsClients;
+	private CustomPieChart clientChart;
+	private ChartPanel clientChartPanel;
 
-	JFreeChart cashiersChart;
-	ChartPanel cashiersChartPanel;
-	CategoryBasedPieDataset dsCashiers;
+	private CustomPieChart cashiersChart;
+	private ChartPanel cashiersChartPanel;
 
-	JFreeChart clientsByCashierChart;
-	ChartPanel clientsByCashierChartPanel;
-	CategoryBasedPieDataset dsClientsByCashier;
+	private CustomPieChart clientsByCashierChart;
+	private ChartPanel clientsByCashierChartPanel;
 	
-	JTabbedPane tabs;
-	JPanel currentSimulationTab;
-	JPanel eventsTab;
-	JPanel configuationTab;
+	private CustomPieChart clientsServedByCashierChart;
+	private ChartPanel clientsServedByCashierChartPanel;
+	
+	private JTabbedPane tabs;
+	private JPanel currentSimulationTab;
+	private JPanel eventsTab;
+	private JPanel configuationTab;
 
 	// End of window components
 
+	// standard colors for the categories
+	
+	private final Color servedColor = new Color(0x00, 0x00, 0x66);
+	private final Color notServedColor = new Color(0xCC, 0x00, 0x00);
+	
+	private final Color regularsColor = new Color(0xCC, 0x00, 0xCC);
+	private final Color priritiesColor = new Color(0x00, 0xCC, 0x00);
+	private final Color managersColor = new Color(0x33, 0x33, 0xFF);
+	private final Color priorityManagersColor = new Color(0xFF, 0x99, 0x00);
+	
 	/**
 	 * Creates the frame.
 	 */
 	public BankFrame()
 	{
-		// frame
+		// frame, contentPane
 
 		setResizable(false);
 		setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		setTitle("Bank Agency Simulator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 786, 524);
+		setBounds(100, 100, 786, 654);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -100,74 +109,69 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		
 		// clients chart
 
-		dsClients = new CategoryBasedPieDataset();
-		dsClients.addNewCategory("Served");
-		dsClients.addNewCategory("Not Served");
+		clientChart = new CustomPieChart("Clients Served");
+		clientChart.addNewCategory("Served");
+		clientChart.addNewCategory("Not Served");
 
-		clientChart = ChartFactory.createPieChart("Clients Served", dsClients, true, true, false);
-		clientChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
-
-		PiePlot clientPlot = (PiePlot) clientChart.getPlot();
-
-		clientPlot.setSectionPaint("Served", new Color(0x00, 0x00, 0x66));
-		clientPlot.setSectionPaint("Not Served", new Color(0xCC, 0x00, 0x00));
-
-		clientPlot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 12));
-		clientPlot.setLabelGenerator(new PieSectionNumericLabelGenerator());
+		clientChart.setSectionPaint("Served", servedColor);
+		clientChart.setSectionPaint("Not Served", notServedColor);
 
 		clientChartPanel = new ChartPanel(clientChart);
-		clientChartPanel.setBounds(10, 11, 379, 246);
+		clientChartPanel.setBounds(385, 11, 360, 246);
 
 		// cashiers chart
 
-		dsCashiers = new CategoryBasedPieDataset();
-		dsCashiers.setValue("Regulars", XMLConfig.getDouble("cashierNumber"));
-		dsCashiers.setValue("Priorities", XMLConfig.getDouble("priorityCashierNumber"));
-		dsCashiers.setValue("Managers", XMLConfig.getDouble("managerNumber"));
-		dsCashiers.setValue("Priority Managers", XMLConfig.getDouble("priorityManagerNumber"));
+		cashiersChart = new CustomPieChart("Cashiers");
+		cashiersChart.addNewCategory("Regulars", XMLConfig.getDouble("cashierNumber"));
+		cashiersChart.addNewCategory("Priorities", XMLConfig.getDouble("priorityCashierNumber"));
+		cashiersChart.addNewCategory("Managers", XMLConfig.getDouble("managerNumber"));
+		cashiersChart.addNewCategory("Priority Managers", XMLConfig.getDouble("priorityManagerNumber"));
 
-		cashiersChart = ChartFactory.createPieChart("Cashiers", dsCashiers, true, true, false);
-		cashiersChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
+		cashiersChart.setSectionPaint("Regulars", regularsColor);
+		cashiersChart.setSectionPaint("Priorities", priritiesColor);
+		cashiersChart.setSectionPaint("Managers", managersColor);
+		cashiersChart.setSectionPaint("Priority Managers", priorityManagersColor);
 
-		PiePlot cashierPlot = (PiePlot) cashiersChart.getPlot();
-
-		cashierPlot.setSectionPaint("Regulars", new Color(0x00, 0x00, 0x66));
-		cashierPlot.setSectionPaint("Priorities", new Color(0xCC, 0x00, 0x00));
-		cashierPlot.setSectionPaint("Managers", new Color(0x00, 0x66, 0x00));
-		cashierPlot.setSectionPaint("Priority Managers", new Color(0xCC, 0xCC, 0x00));
-
-		cashierPlot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 12));
-		cashierPlot.setLabelGenerator(new PieSectionNumericLabelGenerator());
-
+		cashiersChartPanel = new ChartPanel(cashiersChart);
+		cashiersChartPanel.setBounds(10, 11, 340, 223);
+		
 		// clients by cashier chart
 		
-		dsClientsByCashier = new CategoryBasedPieDataset();
-		dsClientsByCashier.addNewCategory("Regulars");
-		dsClientsByCashier.addNewCategory("Priorities");
-		dsClientsByCashier.addNewCategory("Managers");
-		dsClientsByCashier.addNewCategory("Priority Managers");
+		clientsByCashierChart = new CustomPieChart("Clients By Cashiers");
+		clientsByCashierChart.addNewCategory("Regulars");
+		clientsByCashierChart.addNewCategory("Priorities");
+		clientsByCashierChart.addNewCategory("Managers");
+		clientsByCashierChart.addNewCategory("Priority Managers");
 
-		clientsByCashierChart = ChartFactory.createPieChart("Clients By Cashiers", dsClientsByCashier, true, true, false);
-		clientsByCashierChart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
-
-		PiePlot clientsByCashierPlot = (PiePlot) clientsByCashierChart.getPlot();
-
-		clientsByCashierPlot.setSectionPaint("Regulars", new Color(0x00, 0x00, 0x66));
-		clientsByCashierPlot.setSectionPaint("Priorities", new Color(0xCC, 0x00, 0x00));
-		clientsByCashierPlot.setSectionPaint("Managers", new Color(0x00, 0x66, 0x00));
-		clientsByCashierPlot.setSectionPaint("Priority Managers", new Color(0xCC, 0xCC, 0x00));
-
-		clientsByCashierPlot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 12));
-		clientsByCashierPlot.setLabelGenerator(new PieSectionNumericLabelGenerator());
+		clientsByCashierChart.setSectionPaint("Regulars", regularsColor);
+		clientsByCashierChart.setSectionPaint("Priorities", priritiesColor);
+		clientsByCashierChart.setSectionPaint("Managers", managersColor);
+		clientsByCashierChart.setSectionPaint("Priority Managers", priorityManagersColor);
 		
 		clientsByCashierChartPanel = new ChartPanel(clientsByCashierChart);
-		clientsByCashierChartPanel.setBounds(399, 11, 346, 246);
+		clientsByCashierChartPanel.setBounds(10, 11, 365, 246);
+		
+		// clients served by cashier chart
+		
+		clientsServedByCashierChart = new CustomPieChart("Clients Served By Cashiers");
+		clientsServedByCashierChart.addNewCategory("Regulars");
+		clientsServedByCashierChart.addNewCategory("Priorities");
+		clientsServedByCashierChart.addNewCategory("Managers");
+		clientsServedByCashierChart.addNewCategory("Priority Managers");
+
+		clientsServedByCashierChart.setSectionPaint("Regulars", regularsColor);
+		clientsServedByCashierChart.setSectionPaint("Priorities", priritiesColor);
+		clientsServedByCashierChart.setSectionPaint("Managers", managersColor);
+		clientsServedByCashierChart.setSectionPaint("Priority Managers", priorityManagersColor);
+		
+		clientsServedByCashierChartPanel = new ChartPanel(clientsServedByCashierChart);
+		clientsServedByCashierChartPanel.setBounds(10, 268, 365, 246);
 		
 		// btnRunSimulator
 
 		btnRunSimulator = new JButton("Run Simulator");
 		btnRunSimulator.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnRunSimulator.setBounds(649, 437, 121, 46);
+		btnRunSimulator.setBounds(649, 568, 121, 46);
 		btnRunSimulator.addActionListener(btnRunSimulator_Click());
 		contentPane.add(btnRunSimulator);
 
@@ -179,6 +183,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		currentSimulationTab.add(clientChartPanel);
 		currentSimulationTab.add(clientsByCashierChartPanel);
+		currentSimulationTab.add(clientsServedByCashierChartPanel);
 
 		eventsTab = new JPanel();
 		eventsTab.setBackground(Color.WHITE);
@@ -193,10 +198,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		tabs = new JTabbedPane(JTabbedPane.TOP);
 		tabs.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		tabs.setBounds(10, 11, 760, 415);
-
-		cashiersChartPanel = new ChartPanel(cashiersChart);
-		cashiersChartPanel.setBounds(10, 11, 340, 223);
+		tabs.setBounds(10, 11, 760, 546);
 
 		configuationTab = new JPanel();
 		configuationTab.setBackground(Color.WHITE);
@@ -255,12 +257,10 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
-			{
-				//dsClients.setValue("Served", 0.0);
-				//dsClients.setValue("Not Served", 0.0);
-				
-				dsClients.clearValues();
-				dsClientsByCashier.clearValues();
+			{				
+				clientChart.clearValues();
+				clientsByCashierChart.clearValues();
+				clientsServedByCashierChart.clearValues();
 
 				btnRunSimulator.setEnabled(false);
 
@@ -283,7 +283,32 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		};
 	}
 
-	// listens to the simulator and
+	private String getClientCategory(final Client c)
+	{
+		if (c.isLookingForManager()) 
+		{
+			if (c.requiresPriority())
+			{
+				return "Priority Managers";
+			}
+			else
+			{
+				return "Managers";
+			}
+		}
+		else
+		{
+			if (c.requiresPriority())
+			{
+				return "Priorities";
+			}
+			else
+			{
+				return "Regulars";
+			}
+		}
+	}
+	
 	@Override
 	public void ClientServed(final Client c, final int time)
 	{
@@ -292,31 +317,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void run()
 			{
-				dsClients.increaseCategory("Served");
-				dsClients.decreaseCategory("Not Served");
-				
-				if (c.isLookingForManager()) 
-				{
-					if (c.requiresPriority())
-					{
-						dsClientsByCashier.increaseCategory("Priority Managers");
-					}
-					else
-					{
-						dsClientsByCashier.increaseCategory("Managers");
-					}
-				}
-				else
-				{
-					if (c.requiresPriority())
-					{
-						dsClientsByCashier.increaseCategory("Priorities");
-					}
-					else
-					{
-						dsClientsByCashier.increaseCategory("Regulars");
-					}
-				}
+				clientChart.increaseCategory("Served");
+				clientChart.decreaseCategory("Not Served");
+				clientsServedByCashierChart.increaseCategory(getClientCategory(c));
 			}
 		});
 	}
@@ -329,7 +332,8 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void run()
 			{
-				dsClients.increaseCategory("Not Served");
+				clientChart.increaseCategory("Not Served");				
+				clientsByCashierChart.increaseCategory(getClientCategory(c));
 			}
 		});
 	}
