@@ -69,6 +69,15 @@ public final class XMLConfig
 	}
 
 	/**
+	 * Searches for all the configuration names loaded.
+	 * @return Returns an iterable collection containing all the configuration names.
+	 */
+	public static IList<String> getNames()
+	{
+		return data.getKeys();
+	}
+	
+	/**
 	 * Gets the value of said configuration name.
 	 * 
 	 * @param name

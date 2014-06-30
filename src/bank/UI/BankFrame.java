@@ -82,11 +82,12 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	 */
 	public BankFrame()
 	{
+		setIconImage(Toolkit.getDefaultToolkit().getImage(BankFrame.class.getResource("/resources/bank.png")));
 		// frame, contentPane
 
 		setResizable(false);
 		setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		setTitle("Bank Agency Simulator");
+		setTitle("Simula&Emula - Bank Agency Simulator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 786, 654);
 		contentPane = new JPanel();
@@ -166,6 +167,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		
 		clientsServedByCashierChartPanel = new ChartPanel(clientsServedByCashierChart);
 		clientsServedByCashierChartPanel.setBounds(10, 268, 365, 246);
+		clientsServedByCashierChartPanel.setBackground(Color.WHITE);
 		
 		// btnRunSimulator
 
@@ -220,6 +222,28 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		configuationTab.add(txtDuration);
 		txtDuration.setColumns(10);
 		txtDuration.setText(XMLConfig.get("duration"));
+		
+		JLabel lblArrivalProbability = new JLabel("Duration:");
+		lblArrivalProbability.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblArrivalProbability.setBounds(360, 69, 66, 20);
+		configuationTab.add(lblArrivalProbability);
+		
+		textField = new JTextField();
+		textField.setText((String) null);
+		textField.setEditable(false);
+		textField.setColumns(10);
+		textField.setBounds(436, 72, 86, 20);
+		configuationTab.add(textField);
+		
+		table = new JTable();
+		
+		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		table.setBounds(0, 0, 323, 188);
+		
+		JScrollPane tablePane = new JScrollPane(table);
+		tablePane.setBounds(103, 291, 323, 188);
+		
+		configuationTab.add(tablePane);
 		tabs.addTab("Current Simulation", currentSimulationTab);
 		tabs.addTab("Simulation Events", eventsTab);
 
@@ -250,6 +274,8 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 	BankFrame thisIntance = this;
 	private JTextField txtDuration;
+	private JTextField textField;
+	private JTable table;
 
 	private ActionListener btnRunSimulator_Click()
 	{
