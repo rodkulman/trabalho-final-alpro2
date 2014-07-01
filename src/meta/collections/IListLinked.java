@@ -81,4 +81,15 @@ public interface IListLinked<T> extends IList<T>
 	 *            Element which will replace the current one.
 	 */
 	void set(int index, T element);
+	
+	/**
+	 * Indicates whether the list in read-only mode.
+	 * @return True if the list is in read-only mode, otherwise false.
+	 */
+	boolean isReadOnly();
+	
+	/**
+	 * Makes this list enter read-only mode.
+	 */
+	void makeReadOnly();
 }

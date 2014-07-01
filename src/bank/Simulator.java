@@ -2,8 +2,8 @@ package bank;
 
 import java.util.*;
 
+import config.XMLConfig;
 import services.*;
-import io.XMLConfig;
 import meta.*;
 import meta.collections.*;
 

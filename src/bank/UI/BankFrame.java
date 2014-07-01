@@ -1,19 +1,23 @@
 package bank.UI;
 
-import io.XMLConfig;
-
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.*;
 
 import meta.*;
+import meta.collections.*;
 import bank.*;
 
 import org.jfree.chart.*;
 
+import config.XMLConfig;
 import services.*;
+
+import javax.swing.table.DefaultTableModel;
+import javax.xml.soap.MessageFactory;
 
 /**
  * The UI for the bank simulator app.
@@ -22,7 +26,7 @@ import services.*;
  * 
  */
 
-public class BankFrame extends JFrame implements AppendableListener, SimulatorListener
+public class BankFrame extends JFrame implements AppendableListener, SimulatorListener, TableModelListener
 {
 
 	/**
@@ -30,6 +34,11 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	 */
 	private static final long serialVersionUID = -108639763223961561L;
 	private JPanel contentPane;
+
+	/**
+	 * Necessary for some Interface calls
+	 */
+	private BankFrame thisIntance = this;
 
 	/**
 	 * Receives the log messages
@@ -44,10 +53,10 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	// Window components
 
 	private JButton btnRunSimulator;
-	
+
 	private JList<String> lstLogs;
 	private DefaultListModel<String> listModel;
-	
+
 	private CustomPieChart clientChart;
 	private ChartPanel clientChartPanel;
 
@@ -56,27 +65,29 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 	private CustomPieChart clientsByCashierChart;
 	private ChartPanel clientsByCashierChartPanel;
-	
+
 	private CustomPieChart clientsServedByCashierChart;
 	private ChartPanel clientsServedByCashierChartPanel;
-	
+
 	private JTabbedPane tabs;
 	private JPanel currentSimulationTab;
 	private JPanel eventsTab;
 	private JPanel configuationTab;
 
+	private JTable configTable;
+
 	// End of window components
 
 	// standard colors for the categories
-	
+
 	private final Color servedColor = new Color(0x00, 0x00, 0x66);
 	private final Color notServedColor = new Color(0xCC, 0x00, 0x00);
-	
+
 	private final Color regularsColor = new Color(0xCC, 0x00, 0xCC);
 	private final Color priritiesColor = new Color(0x00, 0xCC, 0x00);
 	private final Color managersColor = new Color(0x33, 0x33, 0xFF);
 	private final Color priorityManagersColor = new Color(0xFF, 0x99, 0x00);
-	
+
 	/**
 	 * Creates the frame.
 	 */
@@ -97,9 +108,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		contentPane.setLayout(null);
 
 		// lstLogs
-		
+
 		listModel = new DefaultListModel<>();
-		
+
 		lstLogs = new JList<>(listModel);
 		lstLogs.setLocation(0, 0);
 		lstLogs.setSize(511, 364);
@@ -107,7 +118,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		lstLogs.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lstLogs.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lstLogs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		// clients chart
 
 		clientChart = new CustomPieChart("Clients Served");
@@ -135,9 +146,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		cashiersChartPanel = new ChartPanel(cashiersChart);
 		cashiersChartPanel.setBounds(10, 11, 340, 223);
-		
+
 		// clients by cashier chart
-		
+
 		clientsByCashierChart = new CustomPieChart("Clients By Cashiers");
 		clientsByCashierChart.addNewCategory("Regulars");
 		clientsByCashierChart.addNewCategory("Priorities");
@@ -148,12 +159,12 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		clientsByCashierChart.setSectionPaint("Priorities", priritiesColor);
 		clientsByCashierChart.setSectionPaint("Managers", managersColor);
 		clientsByCashierChart.setSectionPaint("Priority Managers", priorityManagersColor);
-		
+
 		clientsByCashierChartPanel = new ChartPanel(clientsByCashierChart);
 		clientsByCashierChartPanel.setBounds(10, 11, 365, 246);
-		
+
 		// clients served by cashier chart
-		
+
 		clientsServedByCashierChart = new CustomPieChart("Clients Served By Cashiers");
 		clientsServedByCashierChart.addNewCategory("Regulars");
 		clientsServedByCashierChart.addNewCategory("Priorities");
@@ -164,11 +175,11 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		clientsServedByCashierChart.setSectionPaint("Priorities", priritiesColor);
 		clientsServedByCashierChart.setSectionPaint("Managers", managersColor);
 		clientsServedByCashierChart.setSectionPaint("Priority Managers", priorityManagersColor);
-		
+
 		clientsServedByCashierChartPanel = new ChartPanel(clientsServedByCashierChart);
 		clientsServedByCashierChartPanel.setBounds(10, 268, 365, 246);
 		clientsServedByCashierChartPanel.setBackground(Color.WHITE);
-		
+
 		// btnRunSimulator
 
 		btnRunSimulator = new JButton("Run Simulator");
@@ -193,7 +204,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		JScrollPane scrollPane = new JScrollPane(lstLogs);
 		scrollPane.setBounds(10, 11, 511, 364);
-		
+
 		eventsTab.add(scrollPane);
 
 		// tabs
@@ -210,39 +221,45 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		tabs.addTab("Configuration", configuationTab);
 
-		JLabel lblDuration = new JLabel("Duration:");
-		lblDuration.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblDuration.setBounds(360, 38, 66, 20);
-		configuationTab.add(lblDuration);
+		// configTable = new JTable(getConfigurations(), new String[] { "Descr",
+		// "Value", "type", "name" });
+		configTable = new JTable(new Object[][] {}, new String[] { "Descr", "Value", "type", "name" });
+		configTable.setModel(new DefaultTableModel(getConfigurations(), new String[] { "Descr", "Value", "type", "name" })
+		{
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 6020278288117553762L;
 
-		txtDuration = new JTextField();
-		txtDuration.setEditable(false);
-		lblDuration.setLabelFor(txtDuration);
-		txtDuration.setBounds(436, 41, 86, 20);
-		configuationTab.add(txtDuration);
-		txtDuration.setColumns(10);
-		txtDuration.setText(XMLConfig.get("duration"));
+			boolean[] columnEditables = new boolean[] { false, true, false, false };
+
+			public boolean isCellEditable(int row, int column)
+			{
+				return columnEditables[column];
+			}
+		});
 		
-		JLabel lblArrivalProbability = new JLabel("Duration:");
-		lblArrivalProbability.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblArrivalProbability.setBounds(360, 69, 66, 20);
-		configuationTab.add(lblArrivalProbability);
+		configTable.getModel().addTableModelListener(this);
 		
-		textField = new JTextField();
-		textField.setText((String) null);
-		textField.setEditable(false);
-		textField.setColumns(10);
-		textField.setBounds(436, 72, 86, 20);
-		configuationTab.add(textField);
-		
-		table = new JTable();
-		
-		table.setBorder(new LineBorder(new Color(0, 0, 0)));
-		table.setBounds(0, 0, 323, 188);
-		
-		JScrollPane tablePane = new JScrollPane(table);
-		tablePane.setBounds(103, 291, 323, 188);
-		
+		configTable.getColumnModel().getColumn(2).setPreferredWidth(0);
+		configTable.getColumnModel().getColumn(2).setMinWidth(0);
+		configTable.getColumnModel().getColumn(2).setMaxWidth(0);
+		configTable.getColumnModel().getColumn(3).setPreferredWidth(0);
+		configTable.getColumnModel().getColumn(3).setMinWidth(0);
+		configTable.getColumnModel().getColumn(3).setMaxWidth(0);
+
+		configTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+
+		configTable.getColumn("Descr").setHeaderValue("Name");
+
+		configTable.getColumn("Value").setCellRenderer(new CustomTableCellRenderer());
+
+		configTable.setBorder(new LineBorder(new Color(0, 0, 0)));
+		configTable.setBounds(0, 0, 323, 188);
+
+		JScrollPane tablePane = new JScrollPane(configTable);
+		tablePane.setBounds(360, 11, 385, 223);
+
 		configuationTab.add(tablePane);
 		tabs.addTab("Current Simulation", currentSimulationTab);
 		tabs.addTab("Simulation Events", eventsTab);
@@ -272,10 +289,29 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		});
 	}
 
-	BankFrame thisIntance = this;
-	private JTextField txtDuration;
-	private JTextField textField;
-	private JTable table;
+	/**
+	 * Searches for all values in the XML config
+	 * 
+	 * @return Returns an object matrix containing all the config values.
+	 */
+	private Object[][] getConfigurations()
+	{
+		Object[][] retVal;
+
+		ListLinked<String> configs = XMLConfig.getNames();
+
+		retVal = new Object[configs.size()][4];
+
+		for (int i = 0; i < configs.size(); i++)
+		{
+			retVal[i][0] = XMLConfig.getDescr(configs.get(i));
+			retVal[i][1] = XMLConfig.get(configs.get(i));
+			retVal[i][2] = XMLConfig.getType(configs.get(i));
+			retVal[i][3] = configs.get(i);
+		}
+
+		return retVal;
+	}
 
 	private ActionListener btnRunSimulator_Click()
 	{
@@ -283,7 +319,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
-			{				
+			{
 				clientChart.clearValues();
 				clientsByCashierChart.clearValues();
 				clientsServedByCashierChart.clearValues();
@@ -311,7 +347,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 	private String getClientCategory(final Client c)
 	{
-		if (c.isLookingForManager()) 
+		if (c.isLookingForManager())
 		{
 			if (c.requiresPriority())
 			{
@@ -334,7 +370,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			}
 		}
 	}
-	
+
 	@Override
 	public void ClientServed(final Client c, final int time)
 	{
@@ -358,7 +394,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void run()
 			{
-				clientChart.increaseCategory("Not Served");				
+				clientChart.increaseCategory("Not Served");
 				clientsByCashierChart.increaseCategory(getClientCategory(c));
 			}
 		});
@@ -375,5 +411,14 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 				btnRunSimulator.setEnabled(true);
 			}
 		});
+	}
+
+	@Override
+	public void tableChanged(TableModelEvent e)
+	{
+		String name = configTable.getValueAt(e.getFirstRow(), 3).toString();
+		String value = configTable.getValueAt(e.getFirstRow(), 1).toString();
+		
+		XMLConfig.set(name, value);
 	}
 }

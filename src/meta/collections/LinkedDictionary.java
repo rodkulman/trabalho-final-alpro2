@@ -68,10 +68,10 @@ public class LinkedDictionary<TKey, TValue> extends ListLinked<KeyValuePair<TKey
 	/**
 	 * Collects all the keys in the dictionary.
 	 * 
-	 * @return Returns a collection of TKey containing all the keys in this
+	 * @return Returns a read-only collection of TKey containing all the keys in this
 	 *         dictionary.
 	 */
-	public IList<TKey> getKeys()
+	public ListLinked<TKey> getKeys()
 	{
 		ListLinked<TKey> retVal = new ListLinked<>();
 
@@ -80,6 +80,9 @@ public class LinkedDictionary<TKey, TValue> extends ListLinked<KeyValuePair<TKey
 			retVal.add(pair.getKey());
 		}
 
+		// turns the list read-only so it can't be touched.
+		retVal.makeReadOnly();
+		
 		return retVal;
 	}
 }

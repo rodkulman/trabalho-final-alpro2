@@ -1,8 +1,8 @@
 package services;
 
-import io.XMLConfig;
-
 import java.util.Random;
+
+import config.XMLConfig;
 
 /**
  * Represents a client.

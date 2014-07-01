@@ -1,6 +1,6 @@
 package meta;
 
-import io.XMLConfig;
+import config.XMLConfig;
 import meta.collections.IQueue;
 import services.Client;
 import services.ClientGenerator;

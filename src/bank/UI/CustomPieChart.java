@@ -54,7 +54,7 @@ class CustomPieChart extends JFreeChart
 		this.plot = (PiePlot) super.getPlot();
 		this.dataset = (DefaultPieDataset) plot.getDataset();
 		this.categories = new ListLinked<>();
-
+		
 		this.plot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 12));
 		this.plot.setLabelGenerator(new PieSectionNumericLabelGenerator());
 		

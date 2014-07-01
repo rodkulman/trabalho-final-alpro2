@@ -7,12 +7,16 @@ package meta.collections;
  */
 public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 {
+	private boolean readOnly;
+	
 	/**
 	 * Initializes a instance of a ListLinked with no elements.
 	 */
 	public ListLinked()
 	{
 		super();
+		
+		readOnly = false;
 	}
 
 	/**
@@ -38,6 +42,8 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	@Override
 	public void add(int index, T element)
 	{
+		checkReadOnly();
+		
 		LinkedNode<T> newNode = new LinkedNode<>(element);
 
 		if (isEmpty())
@@ -125,6 +131,8 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	@Override
 	public void set(int index, T element)
 	{
+		checkReadOnly();
+		
 		if (index < 0 || index >= count) { throw new IndexOutOfBoundsException(); }
 
 		LinkedNode<T> aux = head;
@@ -147,6 +155,8 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	@Override
 	public boolean remove(T e)
 	{
+		checkReadOnly();
+		
 		LinkedNode<T> aux = head;
 		LinkedNode<T> prev = null;
 
@@ -175,6 +185,8 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	@Override
 	public T removeAt(int index)
 	{
+		checkReadOnly();
+		
 		if (index < 0 || index >= count) { throw new IndexOutOfBoundsException(); }
 
 		LinkedNode<T> aux = head;
@@ -228,5 +240,35 @@ public class ListLinked<T> extends BasicLinkedList<T> implements IListLinked<T>
 	public boolean contains(T e)
 	{
 		return indexOf(e) != -1;
+	}
+
+	/**
+	 * Indicates whether the list in read-only mode.
+	 * @return True if the list is in read-only mode, otherwise false.
+	 */
+	@Override
+	public boolean isReadOnly()
+	{
+		return this.readOnly;
+	}
+
+	/**
+	 * Makes this list enter read-only mode.
+	 */
+	@Override
+	public void makeReadOnly()
+	{
+		this.readOnly = true;
+	}
+	
+	/**
+	 * Checks whether the list is in read-only mode, if so, throws an {@link ReadOnlyException}
+	 */
+	private void checkReadOnly()
+	{
+		if (readOnly)
+		{
+			throw new ReadOnlyException();
+		}
 	}
 }
