@@ -17,7 +17,6 @@ import config.XMLConfig;
 import services.*;
 
 import javax.swing.table.DefaultTableModel;
-import javax.xml.soap.MessageFactory;
 
 /**
  * The UI for the bank simulator app.
