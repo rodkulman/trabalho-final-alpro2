@@ -6,9 +6,6 @@ import meta.Trace;
 import meta.collections.*;
 
 import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.*;
 
@@ -171,71 +168,5 @@ public final class XMLConfig
 	public static double getDouble(String name)
 	{
 		return Double.parseDouble(get(name));
-	}
-
-	/**
-	 * Sets a value to the config.
-	 * 
-	 * @param name
-	 *            Name of the config value.
-	 * @param value
-	 *            Value to be inserted.
-	 */
-	public static void set(String name, String value)
-	{
-		if (data.getValue(name.toUpperCase()).getType().equalsIgnoreCase("number") || data.getValue(name.toUpperCase()).getType().equalsIgnoreCase("probability"))
-		{
-			// tries to parse the value to double to see if it is valid.
-			Double.parseDouble(value);
-		}
-
-		Document doc;
-
-		try
-		{
-			doc = getConfigFile();
-		}
-		catch (Exception ex)
-		{
-			Trace.log(ex);
-			return;
-		}
-
-		// gets the nodes within the config file.
-		Node config = doc.getElementsByTagName("config").item(0);
-		NodeList dataNodes = config.getChildNodes();
-
-		// adds them one by one to the internal dictionary.
-		for (int i = 0; i < dataNodes.getLength(); i++)
-		{
-			Node n = dataNodes.item(i);
-
-			if (n.getNodeName().equalsIgnoreCase(name) && n.getNodeType() == Node.ELEMENT_NODE)
-			{
-				n.setNodeValue(value);
-				break;
-			}
-		}
-
-		Transformer transformer;
-		Source source;
-		Result result;
-
-		try
-		{
-			transformer = TransformerFactory.newInstance().newTransformer();
-
-			result = new StreamResult(new File("config.xml"));
-			source = new DOMSource(doc);
-
-			transformer.transform(source, result);
-		}
-		catch (Exception ex)
-		{
-			Trace.log(ex);
-			return;
-		}
-
-		data.getValue(name).setValue(value);
 	}
 }

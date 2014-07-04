@@ -1,7 +1,5 @@
 package bank;
 
-import java.util.*;
-
 import config.XMLConfig;
 import services.*;
 import meta.*;
@@ -16,42 +14,33 @@ import meta.collections.*;
 public class Simulator extends BaseSimulator
 {
 	/**
-	 * The multiple cashiers the bank has.
-	 */
-	Cashiers cashiers;
-
-	/**
 	 * The client queue for regular cashiers.
 	 */
-	IQueue<Client> cashierQueue;
+	private IQueue<Client> cashierQueue;
 
 	/**
 	 * The client queue for managers.
 	 */
-	IQueue<Client> managerQueue;
+	private IQueue<Client> managerQueue;
 
 	/**
 	 * The priority client queue for cashier.
 	 */
-	IQueue<Client> pCashierQueue;
+	private IQueue<Client> pCashierQueue;
 
 	/**
 	 * The priority client queue for managers.
 	 */
-	IQueue<Client> pManagerQueue;
+	private IQueue<Client> pManagerQueue;
 
 	/*
 	 * The inherited clientQueue object will be used as the initial queue
 	 */
 
-	/**
-	 * Random generator.
-	 */
-	Random rnd;
-
 	public Simulator()
 	{
-		cashiers = new Cashiers();
+		super();
+
 		clientQueue = new QueueLinked<>();
 
 		int cashierNumber = XMLConfig.getInt("cashierNumber");
@@ -65,14 +54,13 @@ public class Simulator extends BaseSimulator
 		createCashiers(cashierNumber, priorityCashierNumber, false);
 		createCashiers(managerNumber, priorityManagerNumber, true);
 
-		rnd = new Random();
-
+		clientGenerator = new ClientGenerator(arrivalProbability);
 		cashierQueue = new QueueLinked<>();
 		managerQueue = new QueueLinked<>();
 		pCashierQueue = new QueueLinked<>();
 		pManagerQueue = new QueueLinked<>();
-
-		clientGenerator = new ClientGenerator(arrivalProbability);
+		
+		clear();
 	}
 
 	/**
@@ -145,7 +133,7 @@ public class Simulator extends BaseSimulator
 		{
 			Client c = clientGenerator.getGeneratedClient();
 			clientQueue.enqueue(c);
-			
+
 			Trace.log("%s: Client %s arrived.", time, c.getID());
 
 			// warns the simulator that a new client arrived
@@ -173,7 +161,7 @@ public class Simulator extends BaseSimulator
 				{
 					return item.isEmpty() && !item.isManager() && !item.isPriority();
 				}
-			});
+			}, time);
 
 			// empty, manager, non-priority
 			dequeueClients(managerQueue, new IQueryable<Cashier>()
@@ -182,7 +170,7 @@ public class Simulator extends BaseSimulator
 				{
 					return item.isEmpty() && item.isManager() && !item.isPriority();
 				}
-			});
+			}, time);
 
 			// empty, regular, priority
 			dequeueClients(pCashierQueue, new IQueryable<Cashier>()
@@ -191,7 +179,7 @@ public class Simulator extends BaseSimulator
 				{
 					return item.isEmpty() && !item.isManager() && item.isPriority();
 				}
-			});
+			}, time);
 
 			// empty, manager, priority
 			dequeueClients(pManagerQueue, new IQueryable<Cashier>()
@@ -200,7 +188,7 @@ public class Simulator extends BaseSimulator
 				{
 					return item.isEmpty() && item.isManager() && item.isPriority();
 				}
-			});
+			}, time);
 		}
 
 		// iterates all the cashiers, decreasing serving time for each occupied
@@ -212,10 +200,10 @@ public class Simulator extends BaseSimulator
 				if (c.getCurrentClient().getRemainigTime() == 0)
 				{
 					// warns the simulator a client a client has been served
-					onClientServed(c.getCurrentClient(), time);
+					onClientServed(c, c.getCurrentClient(), time);
 
 					Trace.log("%s: Client %s served.", time, c.getCurrentClient().getID());
-										
+
 					c.endServing();
 				}
 				else
@@ -234,7 +222,7 @@ public class Simulator extends BaseSimulator
 	 * @param query
 	 *            The where provider for filtering the cashiers
 	 */
-	private void dequeueClients(IQueue<Client> queue, IQueryable<Cashier> query)
+	private void dequeueClients(IQueue<Client> queue, IQueryable<Cashier> query, int time)
 	{
 		// it isn't checked whether the queue is not empty before calling this
 		// method.
@@ -247,7 +235,8 @@ public class Simulator extends BaseSimulator
 
 			try
 			{
-			c.serveNewClient(queue.dequeue());
+				c.serveNewClient(queue.dequeue());
+				onCashierStartedServing(c, c.getCurrentClient(), time);
 			}
 			catch (Exception ex)
 			{
@@ -260,7 +249,18 @@ public class Simulator extends BaseSimulator
 	@Override
 	public void clear()
 	{
+		clientQueue.clear();
+		cashierQueue.clear();
+		managerQueue.clear();
+		pCashierQueue.clear();
+		pManagerQueue.clear();
 
+		clientGenerator.clear();
+
+		for (Cashier c : cashiers)
+		{
+			c.clear();
+		}
 	}
 
 	@Override

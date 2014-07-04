@@ -5,18 +5,17 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
 
 import meta.*;
-import meta.collections.*;
 import bank.*;
+import bank.UI.charts.*;
 
 import org.jfree.chart.*;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import config.XMLConfig;
 import services.*;
-
-import javax.swing.table.DefaultTableModel;
 
 /**
  * The UI for the bank simulator app.
@@ -25,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  * 
  */
 
-public class BankFrame extends JFrame implements AppendableListener, SimulatorListener, TableModelListener
+public class BankFrame extends JFrame implements AppendableListener, SimulatorListener
 {
 
 	/**
@@ -33,11 +32,6 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	 */
 	private static final long serialVersionUID = -108639763223961561L;
 	private JPanel contentPane;
-
-	/**
-	 * Necessary for some Interface calls
-	 */
-	private BankFrame thisIntance = this;
 
 	/**
 	 * Receives the log messages
@@ -62,18 +56,13 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	private CustomPieChart cashiersChart;
 	private ChartPanel cashiersChartPanel;
 
-	private CustomPieChart clientsByCashierChart;
-	private ChartPanel clientsByCashierChartPanel;
-
-	private CustomPieChart clientsServedByCashierChart;
-	private ChartPanel clientsServedByCashierChartPanel;
+	private CustomStackedBarChart newClientsByCashierChart;
+	private ChartPanel newClientsByCashierChartPanel;
 
 	private JTabbedPane tabs;
 	private JPanel currentSimulationTab;
 	private JPanel eventsTab;
 	private JPanel configuationTab;
-
-	private JTable configTable;
 
 	// End of window components
 
@@ -83,7 +72,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	private final Color notServedColor = new Color(0xCC, 0x00, 0x00);
 
 	private final Color regularsColor = new Color(0xCC, 0x00, 0xCC);
-	private final Color priritiesColor = new Color(0x00, 0xCC, 0x00);
+	private final Color prioritiesColor = new Color(0x00, 0xCC, 0x00);
 	private final Color managersColor = new Color(0x33, 0x33, 0xFF);
 	private final Color priorityManagersColor = new Color(0xFF, 0x99, 0x00);
 
@@ -92,9 +81,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	 */
 	public BankFrame()
 	{
-		setIconImage(Toolkit.getDefaultToolkit().getImage(BankFrame.class.getResource("/resources/bank.png")));
 		// frame, contentPane
 
+		setIconImage(Toolkit.getDefaultToolkit().getImage(BankFrame.class.getResource("/resources/bank.png")));
 		setResizable(false);
 		setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		setTitle("Simula&Emula - Bank Agency Simulator");
@@ -105,6 +94,11 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
+		// simulator
+
+		simulator = new Simulator();
+		simulator.addListener(this);
 
 		// lstLogs
 
@@ -128,7 +122,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		clientChart.setSectionPaint("Not Served", notServedColor);
 
 		clientChartPanel = new ChartPanel(clientChart);
-		clientChartPanel.setBounds(385, 11, 360, 246);
+		clientChartPanel.setBounds(10, 268, 360, 246);
 
 		// cashiers chart
 
@@ -139,45 +133,33 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		cashiersChart.addNewCategory("Priority Managers", XMLConfig.getDouble("priorityManagerNumber"));
 
 		cashiersChart.setSectionPaint("Regulars", regularsColor);
-		cashiersChart.setSectionPaint("Priorities", priritiesColor);
+		cashiersChart.setSectionPaint("Priorities", prioritiesColor);
 		cashiersChart.setSectionPaint("Managers", managersColor);
 		cashiersChart.setSectionPaint("Priority Managers", priorityManagersColor);
 
 		cashiersChartPanel = new ChartPanel(cashiersChart);
-		cashiersChartPanel.setBounds(10, 11, 340, 223);
+		cashiersChartPanel.setBounds(10, 11, 402, 255);
 
-		// clients by cashier chart
+		// newClientsByCashierChart
 
-		clientsByCashierChart = new CustomPieChart("Clients By Cashiers");
-		clientsByCashierChart.addNewCategory("Regulars");
-		clientsByCashierChart.addNewCategory("Priorities");
-		clientsByCashierChart.addNewCategory("Managers");
-		clientsByCashierChart.addNewCategory("Priority Managers");
+		newClientsByCashierChart = new CustomStackedBarChart("Clients By Cashier", "Cashiers", "Clients");
 
-		clientsByCashierChart.setSectionPaint("Regulars", regularsColor);
-		clientsByCashierChart.setSectionPaint("Priorities", priritiesColor);
-		clientsByCashierChart.setSectionPaint("Managers", managersColor);
-		clientsByCashierChart.setSectionPaint("Priority Managers", priorityManagersColor);
+		newClientsByCashierChart.addCategory("Served", "Waiting");
+		newClientsByCashierChart.addCategory("Not Served", "Waiting");
+		newClientsByCashierChart.setCatagoryPaint("Not Served", "Waiting", notServedColor);
+		
+		for (Cashier c : simulator.getCashiers())
+		{
+			newClientsByCashierChart.addCategory("Served", "Cashier " + c.getId());
+			newClientsByCashierChart.setCatagoryPaint("Served", "Cashier " + c.getId(), c.isManager() ? (c.isPriority() ? priorityManagersColor : managersColor) : (c.isPriority() ? prioritiesColor : regularsColor));
+			
+			newClientsByCashierChart.addCategory("Not Served", "Cashier " + c.getId());
+			newClientsByCashierChart.setCatagoryPaint("Not Served", "Cashier " + c.getId(), notServedColor);
+		}
 
-		clientsByCashierChartPanel = new ChartPanel(clientsByCashierChart);
-		clientsByCashierChartPanel.setBounds(10, 11, 365, 246);
-
-		// clients served by cashier chart
-
-		clientsServedByCashierChart = new CustomPieChart("Clients Served By Cashiers");
-		clientsServedByCashierChart.addNewCategory("Regulars");
-		clientsServedByCashierChart.addNewCategory("Priorities");
-		clientsServedByCashierChart.addNewCategory("Managers");
-		clientsServedByCashierChart.addNewCategory("Priority Managers");
-
-		clientsServedByCashierChart.setSectionPaint("Regulars", regularsColor);
-		clientsServedByCashierChart.setSectionPaint("Priorities", priritiesColor);
-		clientsServedByCashierChart.setSectionPaint("Managers", managersColor);
-		clientsServedByCashierChart.setSectionPaint("Priority Managers", priorityManagersColor);
-
-		clientsServedByCashierChartPanel = new ChartPanel(clientsServedByCashierChart);
-		clientsServedByCashierChartPanel.setBounds(10, 268, 365, 246);
-		clientsServedByCashierChartPanel.setBackground(Color.WHITE);
+		newClientsByCashierChartPanel = new ChartPanel(newClientsByCashierChart);
+		newClientsByCashierChartPanel.setLocation(10, 11);
+		newClientsByCashierChartPanel.setSize(735, 246);
 
 		// btnRunSimulator
 
@@ -194,8 +176,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		currentSimulationTab.setLayout(null);
 
 		currentSimulationTab.add(clientChartPanel);
-		currentSimulationTab.add(clientsByCashierChartPanel);
-		currentSimulationTab.add(clientsServedByCashierChartPanel);
+		currentSimulationTab.add(newClientsByCashierChartPanel);
 
 		eventsTab = new JPanel();
 		eventsTab.setBackground(Color.WHITE);
@@ -219,47 +200,6 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		configuationTab.add(cashiersChartPanel);
 
 		tabs.addTab("Configuration", configuationTab);
-
-		// configTable = new JTable(getConfigurations(), new String[] { "Descr",
-		// "Value", "type", "name" });
-		configTable = new JTable(new Object[][] {}, new String[] { "Descr", "Value", "type", "name" });
-		configTable.setModel(new DefaultTableModel(getConfigurations(), new String[] { "Descr", "Value", "type", "name" })
-		{
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 6020278288117553762L;
-
-			boolean[] columnEditables = new boolean[] { false, true, false, false };
-
-			public boolean isCellEditable(int row, int column)
-			{
-				return columnEditables[column];
-			}
-		});
-		
-		configTable.getModel().addTableModelListener(this);
-		
-		configTable.getColumnModel().getColumn(2).setPreferredWidth(0);
-		configTable.getColumnModel().getColumn(2).setMinWidth(0);
-		configTable.getColumnModel().getColumn(2).setMaxWidth(0);
-		configTable.getColumnModel().getColumn(3).setPreferredWidth(0);
-		configTable.getColumnModel().getColumn(3).setMinWidth(0);
-		configTable.getColumnModel().getColumn(3).setMaxWidth(0);
-
-		configTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-
-		configTable.getColumn("Descr").setHeaderValue("Name");
-
-		configTable.getColumn("Value").setCellRenderer(new CustomTableCellRenderer());
-
-		configTable.setBorder(new LineBorder(new Color(0, 0, 0)));
-		configTable.setBounds(0, 0, 323, 188);
-
-		JScrollPane tablePane = new JScrollPane(configTable);
-		tablePane.setBounds(360, 11, 385, 223);
-
-		configuationTab.add(tablePane);
 		tabs.addTab("Current Simulation", currentSimulationTab);
 		tabs.addTab("Simulation Events", eventsTab);
 
@@ -288,30 +228,6 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		});
 	}
 
-	/**
-	 * Searches for all values in the XML config
-	 * 
-	 * @return Returns an object matrix containing all the config values.
-	 */
-	private Object[][] getConfigurations()
-	{
-		Object[][] retVal;
-
-		ListLinked<String> configs = XMLConfig.getNames();
-
-		retVal = new Object[configs.size()][4];
-
-		for (int i = 0; i < configs.size(); i++)
-		{
-			retVal[i][0] = XMLConfig.getDescr(configs.get(i));
-			retVal[i][1] = XMLConfig.get(configs.get(i));
-			retVal[i][2] = XMLConfig.getType(configs.get(i));
-			retVal[i][3] = configs.get(i);
-		}
-
-		return retVal;
-	}
-
 	private ActionListener btnRunSimulator_Click()
 	{
 		return new ActionListener()
@@ -320,8 +236,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			public void actionPerformed(ActionEvent e)
 			{
 				clientChart.clearValues();
-				clientsByCashierChart.clearValues();
-				clientsServedByCashierChart.clearValues();
+				newClientsByCashierChart.clearValues();
 
 				btnRunSimulator.setEnabled(false);
 
@@ -331,10 +246,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 					@Override
 					public void run()
 					{
-						simulator = new Simulator();
-
-						simulator.addListener(thisIntance);
-
+						simulator.clear();
 						simulator.simulate();
 					}
 				};
@@ -344,34 +256,8 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		};
 	}
 
-	private String getClientCategory(final Client c)
-	{
-		if (c.isLookingForManager())
-		{
-			if (c.requiresPriority())
-			{
-				return "Priority Managers";
-			}
-			else
-			{
-				return "Managers";
-			}
-		}
-		else
-		{
-			if (c.requiresPriority())
-			{
-				return "Priorities";
-			}
-			else
-			{
-				return "Regulars";
-			}
-		}
-	}
-
 	@Override
-	public void ClientServed(final Client c, final int time)
+	public void ClientServed(final Cashier cashier, final Client client, final int time)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -380,7 +266,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			{
 				clientChart.increaseCategory("Served");
 				clientChart.decreaseCategory("Not Served");
-				clientsServedByCashierChart.increaseCategory(getClientCategory(c));
+
+				newClientsByCashierChart.increaseCategory("Served", "Cashier " + cashier.getId());
+				newClientsByCashierChart.decreaseCategory("Not Served", "Cashier " + cashier.getId());
 			}
 		});
 	}
@@ -394,7 +282,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			public void run()
 			{
 				clientChart.increaseCategory("Not Served");
-				clientsByCashierChart.increaseCategory(getClientCategory(c));
+				newClientsByCashierChart.increaseCategory("Not Served", "Waiting");
 			}
 		});
 	}
@@ -413,11 +301,17 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	}
 
 	@Override
-	public void tableChanged(TableModelEvent e)
+	public void CashierStartedServing(final Cashier cashier, final Client c, int time)
 	{
-		String name = configTable.getValueAt(e.getFirstRow(), 3).toString();
-		String value = configTable.getValueAt(e.getFirstRow(), 1).toString();
-		
-		XMLConfig.set(name, value);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				newClientsByCashierChart.increaseCategory("Not Served", "Cashier " + cashier.getId());
+				newClientsByCashierChart.decreaseCategory("Not Served", "Waiting");
+			}
+		});
 	}
 }

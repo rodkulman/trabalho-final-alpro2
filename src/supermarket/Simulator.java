@@ -97,6 +97,9 @@ public class Simulator extends BaseSimulator
 		clientGenerator = new ClientGenerator(arrivalProbability);
 		watingTime = new Counter();
 		queueSize = new Counter();
+		
+		cashiers = new Cashiers();
+		cashiers.add(cashier);
 	}
 
 	@Override
@@ -108,7 +111,7 @@ public class Simulator extends BaseSimulator
 		System.out.println("Probabilidade de chegada de clientes:" + arrivalProbability);
 		System.out.println("Tempo de atendimento minimo:" + Client.minServingTime);
 		System.out.println("Tempo de atendimento maximo:" + Client.maxServingTime);
-		System.out.println("Cliente atendidos:" + cashier.getServed());
+		System.out.println("Cliente atendidos:" + cashier.getAmountServed());
 		System.out.println("Clientes ainda na fila:" + clientQueue.size());
 		System.out.println("Cliente ainda no caixa:" + (cashier.getCurrentClient() != null));
 		System.out.println("Total de clientes gerados:" + clientGenerator.getAmountGenerated());

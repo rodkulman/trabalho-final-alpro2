@@ -12,7 +12,7 @@ public class ClientGenerator
 	/**
 	 * Probability of generation, from 0.0 to 1.0
 	 */
-	private double probability;
+	private final double probability;
 	/**
 	 * The amount of clients generated.
 	 */
@@ -22,6 +22,9 @@ public class ClientGenerator
 	 */
 	private static final Random rnd = new Random();
 
+	/**
+	 * The last generated client.
+	 */
 	private Client generatedClient = null;
 
 	/**
@@ -78,5 +81,13 @@ public class ClientGenerator
 	public int getAmountGenerated()
 	{
 		return amountGenerated;
+	}
+	
+	/**
+	 * Resets the client generator information.
+	 */
+	public void clear()
+	{
+		amountGenerated = 0;
 	}
 }

@@ -25,6 +25,15 @@ public class Cashier
 	 * Indicates whether this cashier is a manager.
 	 */
 	private final boolean manager;
+	/**
+	 * Indicates the cashier id.
+	 */
+	private final int id;
+
+	/**
+	 * Indicates the number of cashiers created.
+	 */
+	private static int cashiersCreated;
 
 	/**
 	 * Initializes a new instance with no client, and no clients served.
@@ -48,6 +57,9 @@ public class Cashier
 		this.manager = manager;
 		this.currentClient = null;
 		this.served = 0;
+
+		// increments and add to the cashier id
+		this.id = ++cashiersCreated;
 	}
 
 	/**
@@ -79,11 +91,8 @@ public class Cashier
 	 */
 	public void serveNewClient(Client c) throws Exception
 	{
-		if (currentClient != null)
-		{
-			throw new Exception("Cashier is already serving a client.");
-		}
-		
+		if (currentClient != null) { throw new Exception("Cashier is already serving a client."); }
+
 		currentClient = c;
 	}
 
@@ -127,8 +136,27 @@ public class Cashier
 	 * 
 	 * @return Returns the amount of clients served.
 	 */
-	public int getServed()
+	public int getAmountServed()
 	{
 		return served;
+	}
+
+	/**
+	 * Gets the ID of the cashier.
+	 * 
+	 * @return Returns a unique integer indicating the cashier Id.
+	 */
+	public int getId()
+	{
+		return id;
+	}
+	
+	/**
+	 * Clears the cashier information.
+	 */
+	public void clear()
+	{
+		this.currentClient = null;
+		this.served = 0;
 	}
 }

@@ -2,6 +2,8 @@ package meta;
 
 import config.XMLConfig;
 import meta.collections.IQueue;
+import services.Cashier;
+import services.Cashiers;
 import services.Client;
 import services.ClientGenerator;
 
@@ -31,9 +33,19 @@ public abstract class BaseSimulator
 	protected ClientGenerator clientGenerator;
 
 	/**
+	 * Represents all the cashiers
+	 */
+	protected Cashiers cashiers;
+
+	/**
 	 * The class listening the events fired by this class;
 	 */
 	private SimulatorListener listener;
+
+	protected BaseSimulator()
+	{
+		cashiers = new Cashiers();
+	}
 
 	/**
 	 * Adds a new listener to this simulator.
@@ -61,13 +73,31 @@ public abstract class BaseSimulator
 		onSimulationEnded();
 	}
 
+	/**
+	 * Gets all the cashiers in the simulator.
+	 * 
+	 * @return A collection of cashiers the simulator has created.
+	 */
+	public Cashiers getCashiers()
+	{
+		return cashiers;
+	}
+
 	// event firing
 
-	protected void onClientServed(final Client c, final int time)
+	protected void onClientServed(final Cashier cashier, final Client c, final int time)
 	{
 		if (listener != null)
 		{
-			listener.ClientServed(c, time);
+			listener.ClientServed(cashier, c, time);
+		}
+	}
+	
+	protected void onCashierStartedServing(final Cashier cashier, final Client c, final int time)
+	{
+		if (listener != null)
+		{
+			listener.CashierStartedServing(cashier, c, time);
 		}
 	}
 

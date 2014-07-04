@@ -1,4 +1,4 @@
-package bank.UI;
+package bank.UI.charts;
 
 import java.awt.*;
 
@@ -14,7 +14,7 @@ import org.jfree.data.general.*;
  * @author rodkulman@gmail.com
  * 
  */
-class CustomPieChart extends JFreeChart
+public class CustomPieChart extends JFreeChart
 {
 	/**
 	 * 

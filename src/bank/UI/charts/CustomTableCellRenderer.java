@@ -1,4 +1,4 @@
-package bank.UI;
+package bank.UI.charts;
 
 import java.awt.Component;
 
