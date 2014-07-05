@@ -1,2 +1,3 @@
-trabalho-final-alpro2
+#![Logo](src/resources/bank.png) Trabalho Final - Alpro2: Bank Agency Simulator
 =====================
+
