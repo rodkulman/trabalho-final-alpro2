@@ -11,8 +11,6 @@ import bank.*;
 import bank.UI.charts.*;
 
 import org.jfree.chart.*;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
 
 import config.XMLConfig;
 import services.*;

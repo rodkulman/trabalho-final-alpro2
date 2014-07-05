@@ -1,92 +1,160 @@
 package meta.collections;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /**
- * 'Tis sorcery.
+ * Enables storing values table-like and dictionary-like. (Poorly written).
+ * 
  * @author rodkulman@gmail.com
- *
- * @param <TKey1>
- * @param <TKey2>
- * @param <TValue>
  */
-public class Table<TKey1, TKey2, TValue>
+public class Table<TRow, TColumn, TValue>
 {
-	private ArrayList<TKey1> keys1;
-	private ArrayList<TKey2> keys2;
+	/**
+	 * Stores the row values.
+	 */
+	private ArrayList<TRow> rows;
+	/**
+	 * Stores the Column values.
+	 */
+	private ArrayList<TColumn> columns;
+	/**
+	 * Stores the actual values.
+	 */
 	private TValue[][] values;
+	/**
+	 * Gets the amount of values there is.
+	 */
 	private int size;
-	
+
 	@SuppressWarnings("unchecked")
 	public Table()
 	{
-		keys1 = new ArrayList<>();
-		keys2 = new ArrayList<>();
+		rows = new ArrayList<>();
+		columns = new ArrayList<>();
 		values = (TValue[][]) new Object[8][8];
-		
+
 		size = 0;
 	}
-	
+
+	/**
+	 * Increments the size of arrays that form the matrix
+	 */
 	@SuppressWarnings("unchecked")
 	private void checkSize()
 	{
 		if (values.length == size)
 		{
 			TValue[][] tmp = (TValue[][]) new Object[size * 2][size * 2];
-			
+
 			for (int i = 0; i < size; i++)
 			{
 				tmp[i] = Arrays.copyOf(values[i], size * 2);
 			}
-			
+
 			values = tmp;
 		}
 	}
-	
-	public void add(TKey1 key1, TKey2 key2, TValue value)
+
+	/**
+	 * Adds a new value to the collection
+	 * 
+	 * @param row
+	 *            Row-key to the value.
+	 * @param column
+	 *            Column-key to the value.
+	 * @param value
+	 *            Value to be added.
+	 */
+	public void add(TRow row, TColumn column, TValue value)
 	{
-		checkForDuplicateKey(key1, key2);
+		checkForDuplicateKey(row, column);
 		checkSize();
-		
-		keys1.add(key1);
-		keys2.add(key2);
-		
-		values[keys1.size() - 1][keys2.size() - 1] = value;
+
+		rows.add(row);
+		columns.add(column);
+
+		values[rows.size() - 1][columns.size() - 1] = value;
 		size++;
 	}
-	
-	public TValue get(TKey1 key1, TKey2 key2)
+
+	/**
+	 * Gets a specified value in the collection. Null if not found.
+	 * 
+	 * @param row
+	 *            Row to find.
+	 * @param column
+	 *            Column to find.
+	 * @return The value at the location, otherwise null.
+	 */
+	public TValue get(TRow row, TColumn column)
 	{
-		for (int i : getIndexOfAll(key1))
+		for (int i : getIndexOfAll(row))
 		{
-			if (keys2.get(i) == key2)
-			{
-				return values[i][i];
-			}
+			if (columns.get(i) == column) { return values[i][i]; }
 		}
-		
+
 		return null;
 	}
-	
-	private ArrayList<Integer> getIndexOfAll(TKey1 key)
+
+	/**
+	 * Sets or add a value to the collection at the specified row-column.
+	 */
+	public void set(TRow row, TColumn column, TValue value)
+	{
+		ArrayList<Integer> references = getIndexOfAll(row);
+
+		// if there are no column references to the row, add a new
+		if (references.size() == 0)
+		{
+			add(row, column, value);
+		}
+
+		// checks for column references
+		for (int i : references)
+		{
+			if (columns.get(i) == column)
+			{
+				// if founds set
+				values[i][i] = value;
+				return;
+			}
+		}
+
+		// if it reaches here, add a new one because no column was found.
+		add(row, column, value);
+	}
+
+	/**
+	 * Gets the index of all references to row
+	 */
+	private ArrayList<Integer> getIndexOfAll(TRow row)
 	{
 		ArrayList<Integer> retVal = new ArrayList<>();
-		
-		for (int i = 0; i < keys1.size(); i++)
+
+		for (int i = 0; i < rows.size(); i++)
 		{
-			if (keys1.get(i) == key)
-				{
-			retVal.add(i);
-				}
+			if (rows.get(i) == row)
+			{
+				retVal.add(i);
+			}
 		}
-		
+
 		return retVal;
 	}
 
-	private void checkForDuplicateKey(TKey1 key1, TKey2 key2)
+	/**
+	 * Checks if that same row-column combination was already added.
+	 * 
+	 * @param row
+	 *            Row to check.
+	 * @param column
+	 *            Column to check.
+	 */
+	private void checkForDuplicateKey(TRow row, TColumn column)
 	{
-		// TODO Auto-generated method stub
-		
+		for (int i : getIndexOfAll(row))
+		{
+			if (columns.get(i) == column) { throw new DuplicateKeyException(); }
+		}
 	}
 }

@@ -9,7 +9,7 @@ import org.jfree.chart.plot.*;
 import org.jfree.data.general.*;
 
 /**
- * Allows for better manipulation of the PieChart, intended to be internal.
+ * Allows for better manipulation of the PieChart.
  * 
  * @author rodkulman@gmail.com
  * 
