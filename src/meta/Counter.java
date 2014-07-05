@@ -19,8 +19,7 @@ public class Counter
 
 	public Counter()
 	{
-		value = 0;
-		quantity = 0;
+		this.clear();
 	}
 
 	/**
@@ -70,5 +69,14 @@ public class Counter
 		{
 			return 0;
 		}
+	}
+	
+	/**
+	 * Clear all the information in the counter.
+	 */
+	public void clear()
+	{
+		this.quantity = 0;
+		this.value = 0;
 	}
 }

@@ -1,7 +1,6 @@
 package bank.UI.charts;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import java.security.InvalidParameterException;
 
 import meta.collections.ListLinked;
@@ -36,7 +35,7 @@ public class CustomStackedBarChart extends JFreeChart
 
 	public CustomStackedBarChart(String title, String categoryTitle, String rangeTitle)
 	{
-		super(title, new Font("Segoe UI", Font.BOLD, 18), new CategoryPlot(new DefaultCategoryDataset(), new CategoryAxis(categoryTitle), new NumberAxis(rangeTitle), new StackedBarRenderer()), true);
+		super(title, new Font("Segoe UI", Font.PLAIN, 18), new CategoryPlot(new DefaultCategoryDataset(), new CategoryAxis(categoryTitle), new NumberAxis(rangeTitle), new StackedBarRenderer()), true);
 
 		this.plot = (CategoryPlot) super.getPlot();
 		this.dataset = (DefaultCategoryDataset) this.plot.getDataset();
@@ -46,8 +45,10 @@ public class CustomStackedBarChart extends JFreeChart
 
 		// sets the plot to paint flat
 		this.renderer.setBarPainter(new StandardBarPainter());
-
+		this.renderer.setShadowVisible(false);
+		
 		this.plot.setRenderer(renderer);
+		this.plot.setRangeGridlinePaint(Color.BLACK);
 
 		this.setBackgroundPaint(Color.WHITE);
 	}
@@ -61,6 +62,14 @@ public class CustomStackedBarChart extends JFreeChart
 		columnCategories.add(column);
 
 		dataset.addValue(0.0, row, column);
+	}
+	
+	/**
+	 * Adds a new legend to the chart.
+	 */
+	public void addLegend(String name, Color color)
+	{
+		this.renderer.addLegendItem(name, color);
 	}
 
 	/**
@@ -117,5 +126,13 @@ public class CustomStackedBarChart extends JFreeChart
 		dataset.setValue(retVal, row, column);
 
 		return retVal;
+	}
+	
+	/**
+	 * Gets the value of the specified category.
+	 */
+	public double getValue(String row, String column)
+	{
+		return dataset.getValue(row, column).doubleValue();
 	}
 }

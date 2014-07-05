@@ -91,6 +91,14 @@ public class Cashiers implements Iterable<Cashier>
 			}
 		};
 	}
+	
+	/**
+	 * Gets a cashier at the specified index.
+	 */
+	public Cashier at(int index)
+	{
+		return cashiers.get(index);
+	}
 
 	@Override
 	public Iterator<Cashier> iterator()

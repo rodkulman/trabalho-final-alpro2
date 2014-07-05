@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><config>
 	<duration descr="Duration" type="number">200</duration>
-	<cashierNumber descr="Regulars Number" type="number">1</cashierNumber>
+	<cashierNumber descr="Regulars Number" type="number">2</cashierNumber>
 	<priorityCashierNumber descr="Priorities Number" type="number">1</priorityCashierNumber>
 	<managerNumber descr="Managers" type="number">1</managerNumber>
 	<priorityManagerNumber descr="Priority Managers" type="number">1</priorityManagerNumber>
-	<arrivalProbability descr="Arrival Probability" type="probability">0.1</arrivalProbability>
+	<arrivalProbability descr="Arrival Probability" type="probability">0.4</arrivalProbability>
 	<minServingTime descr="Minimum Serving Time" type="number">5</minServingTime>
 	<maxServingTime descr="Maximum Serving Time" type="number">10</maxServingTime>
 	<priorityProbality descr="Priority Probability" type="probability">0.2</priorityProbality>

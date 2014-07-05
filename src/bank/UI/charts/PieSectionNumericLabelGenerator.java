@@ -13,6 +13,34 @@ import org.jfree.data.general.PieDataset;
  */
 public class PieSectionNumericLabelGenerator implements PieSectionLabelGenerator
 {
+	/**
+	 * Sets the label mode to display the number itself.
+	 */
+	public static final int NUMBER_MODE = 0;
+	
+	/**
+	 * Sets the label mode to display the value * 100 followed by a "%" sign.
+	 */
+	public static final int PERCENTAGE_MODE = 1;
+
+	private int labelMode = NUMBER_MODE;
+
+	/**
+	 * Gets the current Label Mode being used. Default is NUMBER_MODE.
+	 */
+	public int getLabelMode()
+	{
+		return labelMode;
+	}
+
+	/**
+	 * Sets a new label mode to be used.
+	 */
+	public void setLabelMode(int labelMode)
+	{
+		this.labelMode = labelMode;
+	}
+
 	@Override
 	public AttributedString generateAttributedSectionLabel(PieDataset dataset, @SuppressWarnings("rawtypes") Comparable key)
 	{
@@ -22,6 +50,13 @@ public class PieSectionNumericLabelGenerator implements PieSectionLabelGenerator
 	@Override
 	public String generateSectionLabel(PieDataset dataset, @SuppressWarnings("rawtypes") Comparable key)
 	{
-		return dataset.getValue(key).toString();
+		switch (labelMode)
+		{
+		case PERCENTAGE_MODE:
+			return Math.round((dataset.getValue(key).doubleValue() * 100)) + "%";
+		case NUMBER_MODE:
+		default:
+			return dataset.getValue(key).toString();
+		}
 	}
 }

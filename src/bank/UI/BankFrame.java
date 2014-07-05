@@ -11,9 +11,15 @@ import bank.*;
 import bank.UI.charts.*;
 
 import org.jfree.chart.*;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import config.XMLConfig;
 import services.*;
+
+import javax.swing.GroupLayout.Alignment;
 
 /**
  * The UI for the bank simulator app.
@@ -44,6 +50,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	// Window components
 
 	private JButton btnRunSimulator;
+	private JPanel statisticsPanel;
 
 	private JList<String> lstLogs;
 	private DefaultListModel<String> listModel;
@@ -54,13 +61,21 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	private CustomPieChart cashiersChart;
 	private ChartPanel cashiersChartPanel;
 
-	private CustomStackedBarChart newClientsByCashierChart;
-	private ChartPanel newClientsByCashierChartPanel;
+	private CustomStackedBarChart cashierPerformanceChart;
+	private ChartPanel cashierPerformanceChartPanel;
+
+	private CustomPieChart probabilityChart;
+	private ChartPanel probabilityChartPanel;
+
+	private JFreeChart cashierPerformanceOTChart;
+	private DefaultCategoryDataset dsCashierPerformanceOT;
+	private ChartPanel clientsServedOverTimeChartPanel;
 
 	private JTabbedPane tabs;
 	private JPanel currentSimulationTab;
 	private JPanel eventsTab;
 	private JPanel configuationTab;
+	private JPanel simulationOverTimeTab;
 
 	// End of window components
 
@@ -68,11 +83,14 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 	private final Color servedColor = new Color(0x00, 0x00, 0x66);
 	private final Color notServedColor = new Color(0xCC, 0x00, 0x00);
+	private final Color notFinishedServingColor = new Color(0x5C, 0x00, 0x5C);
 
-	private final Color regularsColor = new Color(0xCC, 0x00, 0xCC);
+	private final Color regularsColor = new Color(0xCC, 0x99, 0x00);
 	private final Color prioritiesColor = new Color(0x00, 0xCC, 0x00);
 	private final Color managersColor = new Color(0x33, 0x33, 0xFF);
-	private final Color priorityManagersColor = new Color(0xFF, 0x99, 0x00);
+	private final Color priorityManagersColor = new Color(0x99, 0x33, 0x33);
+	private JLabel lblAverageWaitingTime;
+	private JLabel lblAverageQueueSize;
 
 	/**
 	 * Creates the frame.
@@ -92,6 +110,16 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
+
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception ex)
+		{
+			Trace.log(ex);
+		}
 
 		// simulator
 
@@ -138,26 +166,85 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		cashiersChartPanel = new ChartPanel(cashiersChart);
 		cashiersChartPanel.setBounds(10, 11, 402, 255);
 
+		// probability Chart
+
+		// a thanks to Rafael Wasilewski <wasilewski1991@gmail.com> for the math on probabilities
+		
+		probabilityChart = new CustomPieChart("Probability of New Clients");
+		probabilityChart.addNewCategory("Regular", (1 - XMLConfig.getDouble("priorityProbality")) * (1 - XMLConfig.getDouble("managerProbality")));
+		probabilityChart.addNewCategory("Priority", XMLConfig.getDouble("priorityProbality") * (1 - XMLConfig.getDouble("managerProbality")));
+		probabilityChart.addNewCategory("Manager", (1 - XMLConfig.getDouble("priorityProbality")) * XMLConfig.getDouble("managerProbality"));
+		probabilityChart.addNewCategory("Priority Manager", XMLConfig.getDouble("priorityProbality") * XMLConfig.getDouble("managerProbality"));
+
+		probabilityChart.setSectionPaint("Regular", regularsColor);
+		probabilityChart.setSectionPaint("Priority", prioritiesColor);
+		probabilityChart.setSectionPaint("Manager", managersColor);
+		probabilityChart.setSectionPaint("Priority Manager", priorityManagersColor);
+		
+		probabilityChart.setLabelMode(PieSectionNumericLabelGenerator.PERCENTAGE_MODE);
+		
+		probabilityChartPanel = new ChartPanel(probabilityChart);
+		probabilityChartPanel.setBounds(10, 277, 402, 229);
+		
 		// newClientsByCashierChart
 
-		newClientsByCashierChart = new CustomStackedBarChart("Clients By Cashier", "Cashiers", "Clients");
+		cashierPerformanceChart = new CustomStackedBarChart("Cashier Performance", "", "Clients");
 
-		newClientsByCashierChart.addCategory("Served", "Waiting");
-		newClientsByCashierChart.addCategory("Not Served", "Waiting");
-		newClientsByCashierChart.setCatagoryPaint("Not Served", "Waiting", notServedColor);
-		
+		cashierPerformanceChart.addCategory("Served", "Waiting");
+		cashierPerformanceChart.addCategory("Not Served", "Waiting");
+		cashierPerformanceChart.setCatagoryPaint("Not Served", "Waiting", notServedColor);
+
 		for (Cashier c : simulator.getCashiers())
 		{
-			newClientsByCashierChart.addCategory("Served", "Cashier " + c.getId());
-			newClientsByCashierChart.setCatagoryPaint("Served", "Cashier " + c.getId(), c.isManager() ? (c.isPriority() ? priorityManagersColor : managersColor) : (c.isPriority() ? prioritiesColor : regularsColor));
-			
-			newClientsByCashierChart.addCategory("Not Served", "Cashier " + c.getId());
-			newClientsByCashierChart.setCatagoryPaint("Not Served", "Cashier " + c.getId(), notServedColor);
+			cashierPerformanceChart.addCategory("Served", "Cashier " + c.getId());
+			cashierPerformanceChart.setCatagoryPaint("Served", "Cashier " + c.getId(), getCashierColor(c));
+
+			cashierPerformanceChart.addCategory("Not Served", "Cashier " + c.getId());
+			cashierPerformanceChart.setCatagoryPaint("Not Served", "Cashier " + c.getId(), notFinishedServingColor);
 		}
 
-		newClientsByCashierChartPanel = new ChartPanel(newClientsByCashierChart);
-		newClientsByCashierChartPanel.setLocation(10, 11);
-		newClientsByCashierChartPanel.setSize(735, 246);
+		cashierPerformanceChart.addLegend("Waiting", notServedColor);
+		cashierPerformanceChart.addLegend("Regulars", regularsColor);
+		cashierPerformanceChart.addLegend("Priorities", prioritiesColor);
+		cashierPerformanceChart.addLegend("Managers", managersColor);
+		cashierPerformanceChart.addLegend("Priority Managers", priorityManagersColor);
+		cashierPerformanceChart.addLegend("Not Finshed Serving", notFinishedServingColor);
+
+		cashierPerformanceChartPanel = new ChartPanel(cashierPerformanceChart);
+		cashierPerformanceChartPanel.setLocation(10, 11);
+		cashierPerformanceChartPanel.setSize(735, 246);
+
+		// clientsServedOverTime
+
+		dsCashierPerformanceOT = new DefaultCategoryDataset();
+		cashierPerformanceOTChart = ChartFactory.createLineChart("Cashier Performance Over Time", "Simulations", "Clients", dsCashierPerformanceOT, PlotOrientation.VERTICAL, true, true, false);
+		cashierPerformanceOTChart.getTitle().setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		cashierPerformanceOTChart.setBackgroundPaint(Color.WHITE);
+
+		CategoryPlot plotCFOT = cashierPerformanceOTChart.getCategoryPlot();
+
+		plotCFOT.setBackgroundPaint(Color.WHITE);
+		plotCFOT.setRangeGridlinePaint(Color.BLACK);
+		plotCFOT.setDomainGridlinesVisible(true);
+		plotCFOT.setDomainGridlinePaint(Color.BLACK);
+
+		LineAndShapeRenderer rendererCFOT = (LineAndShapeRenderer) cashierPerformanceOTChart.getCategoryPlot().getRenderer();
+
+		for (int i = 0; i < 5; i++)
+		{
+			rendererCFOT.setSeriesShapesVisible(i, true);
+			rendererCFOT.setSeriesPaint(i, getCashierColor(simulator.getCashiers().at(i)));
+		}
+
+		rendererCFOT.setSeriesShapesVisible(5, true);
+		rendererCFOT.setSeriesPaint(5, notServedColor);
+
+		rendererCFOT.setSeriesShapesVisible(6, true);
+		rendererCFOT.setSeriesPaint(6, notFinishedServingColor);
+
+		clientsServedOverTimeChartPanel = new ChartPanel(cashierPerformanceOTChart);
+		clientsServedOverTimeChartPanel.setSize(735, 496);
+		clientsServedOverTimeChartPanel.setLocation(10, 10);
 
 		// btnRunSimulator
 
@@ -174,11 +261,17 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		currentSimulationTab.setLayout(null);
 
 		currentSimulationTab.add(clientChartPanel);
-		currentSimulationTab.add(newClientsByCashierChartPanel);
+		currentSimulationTab.add(cashierPerformanceChartPanel);
 
 		eventsTab = new JPanel();
 		eventsTab.setBackground(Color.WHITE);
 		eventsTab.setLayout(null);
+
+		simulationOverTimeTab = new JPanel();
+		simulationOverTimeTab.setBackground(Color.WHITE);
+		simulationOverTimeTab.setLayout(null);
+
+		simulationOverTimeTab.add(clientsServedOverTimeChartPanel);
 
 		JScrollPane scrollPane = new JScrollPane(lstLogs);
 		scrollPane.setBounds(10, 11, 511, 364);
@@ -196,9 +289,28 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		configuationTab.setLayout(null);
 
 		configuationTab.add(cashiersChartPanel);
+		configuationTab.add(probabilityChartPanel);
 
 		tabs.addTab("Configuration", configuationTab);
 		tabs.addTab("Current Simulation", currentSimulationTab);
+		tabs.addTab("Simulations Over Time", simulationOverTimeTab);
+
+		statisticsPanel = new JPanel();
+		statisticsPanel.setBackground(Color.WHITE);
+		statisticsPanel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Statistics", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.PLAIN, 14), null));
+		statisticsPanel.setBounds(380, 268, 365, 238);
+		currentSimulationTab.add(statisticsPanel);
+		statisticsPanel.setLayout(new GridLayout(8, 1, 0, 0));
+
+		lblAverageQueueSize = new JLabel("Average Queue Size: 0.0");
+		lblAverageQueueSize.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+		lblAverageWaitingTime = new JLabel("Average Waiting Time: 0.0");
+		lblAverageWaitingTime.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+		statisticsPanel.add(lblAverageWaitingTime);
+		statisticsPanel.add(lblAverageQueueSize);
+
 		tabs.addTab("Simulation Events", eventsTab);
 
 		contentPane.add(tabs);
@@ -210,6 +322,11 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		// sets the login output to be the logger
 		Trace.setOutput(logger);
+	}
+
+	private Color getCashierColor(Cashier c)
+	{
+		return c.isManager() ? (c.isPriority() ? priorityManagersColor : managersColor) : (c.isPriority() ? prioritiesColor : regularsColor);
 	}
 
 	@Override
@@ -234,7 +351,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			public void actionPerformed(ActionEvent e)
 			{
 				clientChart.clearValues();
-				newClientsByCashierChart.clearValues();
+				cashierPerformanceChart.clearValues();
 
 				btnRunSimulator.setEnabled(false);
 
@@ -265,8 +382,8 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 				clientChart.increaseCategory("Served");
 				clientChart.decreaseCategory("Not Served");
 
-				newClientsByCashierChart.increaseCategory("Served", "Cashier " + cashier.getId());
-				newClientsByCashierChart.decreaseCategory("Not Served", "Cashier " + cashier.getId());
+				cashierPerformanceChart.increaseCategory("Served", "Cashier " + cashier.getId());
+				cashierPerformanceChart.decreaseCategory("Not Served", "Cashier " + cashier.getId());
 			}
 		});
 	}
@@ -280,7 +397,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			public void run()
 			{
 				clientChart.increaseCategory("Not Served");
-				newClientsByCashierChart.increaseCategory("Not Served", "Waiting");
+				cashierPerformanceChart.increaseCategory("Not Served", "Waiting");
 			}
 		});
 	}
@@ -294,6 +411,26 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			public void run()
 			{
 				btnRunSimulator.setEnabled(true);
+				lblAverageWaitingTime.setText(String.format("Average Waiting Time: %s", simulator.getAverageWaitingTime()));
+				lblAverageQueueSize.setText(String.format("Average Queue Size: %s", simulator.getAverageQueueSize()));
+
+				// gets the number of the simulation
+				int simulation = dsCashierPerformanceOT.getColumnCount() + 1;
+
+				double notFinishedServing = 0.0;
+
+				for (Cashier c : simulator.getCashiers())
+				{
+					double value = cashierPerformanceChart.getValue("Served", "Cashier " + c.getId());
+					notFinishedServing += cashierPerformanceChart.getValue("Not Served", "Cashier " + c.getId());
+
+					dsCashierPerformanceOT.addValue(value, "Cashier " + c.getId(), String.valueOf(simulation));
+				}
+
+				double waiting = cashierPerformanceChart.getValue("Not Served", "Waiting");
+
+				dsCashierPerformanceOT.addValue(waiting, "Waiting", String.valueOf(simulation));
+				dsCashierPerformanceOT.addValue(notFinishedServing, "Not Finished Serving", String.valueOf(simulation));
 			}
 		});
 	}
@@ -307,8 +444,8 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			@Override
 			public void run()
 			{
-				newClientsByCashierChart.increaseCategory("Not Served", "Cashier " + cashier.getId());
-				newClientsByCashierChart.decreaseCategory("Not Served", "Waiting");
+				cashierPerformanceChart.increaseCategory("Not Served", "Cashier " + cashier.getId());
+				cashierPerformanceChart.decreaseCategory("Not Served", "Waiting");
 			}
 		});
 	}

@@ -36,6 +36,8 @@ public class CustomPieChart extends JFreeChart
 	 */
 	private PiePlot plot;
 
+	private PieSectionNumericLabelGenerator labelGenerator;
+
 	/**
 	 * Gets the categories stored in this dataset.
 	 */
@@ -49,15 +51,21 @@ public class CustomPieChart extends JFreeChart
 	 */
 	public CustomPieChart(String title)
 	{
-		super(title, new Font("Segoe UI", Font.BOLD, 18), new PiePlot(new DefaultPieDataset()), true);
+		super(title, new Font("Segoe UI", Font.PLAIN, 18), new PiePlot(new DefaultPieDataset()), true);
 
 		this.plot = (PiePlot) super.getPlot();
 		this.dataset = (DefaultPieDataset) plot.getDataset();
 		this.categories = new ListLinked<>();
-		
+
+		this.labelGenerator = new PieSectionNumericLabelGenerator();
+
 		this.plot.setLabelFont(new Font("Segoe UI", Font.PLAIN, 12));
-		this.plot.setLabelGenerator(new PieSectionNumericLabelGenerator());
-		
+		this.plot.setLabelGenerator(labelGenerator);
+
+		// no shadow
+		this.plot.setShadowXOffset(0);
+		this.plot.setShadowYOffset(0);
+
 		this.setBackgroundPaint(Color.WHITE);
 	}
 
@@ -140,5 +148,15 @@ public class CustomPieChart extends JFreeChart
 	public void setSectionPaint(String category, Color color)
 	{
 		this.plot.setSectionPaint(category, color);
+	}
+
+	/**
+	 * Sets the label mode.
+	 * 
+	 * @see {@link PieSectionNumericLabelGenerator} for more details.
+	 */
+	public void setLabelMode(int mode)
+	{
+		this.labelGenerator.setLabelMode(mode);
 	}
 }

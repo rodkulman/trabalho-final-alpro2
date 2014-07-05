@@ -33,6 +33,16 @@ public class Simulator extends BaseSimulator
 	 */
 	private IQueue<Client> pManagerQueue;
 
+	/**
+	 * Measures the average waiting time
+	 */
+	private Counter waitingTime;
+	
+	/**
+	 * Measures the average queue size
+	 */
+	private Counter queueSize;
+	
 	/*
 	 * The inherited clientQueue object will be used as the initial queue
 	 */
@@ -59,6 +69,10 @@ public class Simulator extends BaseSimulator
 		managerQueue = new QueueLinked<>();
 		pCashierQueue = new QueueLinked<>();
 		pManagerQueue = new QueueLinked<>();
+		
+		// counters
+		waitingTime = new Counter();
+		queueSize = new Counter();
 		
 		clear();
 	}
@@ -212,6 +226,12 @@ public class Simulator extends BaseSimulator
 				}
 			}
 		}
+		
+		queueSize.add(clientQueue.size());
+		queueSize.add(pCashierQueue.size());
+		queueSize.add(pManagerQueue.size());
+		queueSize.add(cashierQueue.size());
+		queueSize.add(managerQueue.size());
 	}
 
 	/**
@@ -235,8 +255,12 @@ public class Simulator extends BaseSimulator
 
 			try
 			{
-				c.serveNewClient(queue.dequeue());
-				onCashierStartedServing(c, c.getCurrentClient(), time);
+				Client client = queue.dequeue();
+				c.serveNewClient(client);
+				onCashierStartedServing(c, client, time);
+				
+				// calculates the time it took to ger served
+				waitingTime.add(time - client.getArrival());
 			}
 			catch (Exception ex)
 			{
@@ -254,7 +278,10 @@ public class Simulator extends BaseSimulator
 		managerQueue.clear();
 		pCashierQueue.clear();
 		pManagerQueue.clear();
-
+		
+		waitingTime.clear();
+		queueSize.clear();
+		
 		clientGenerator.clear();
 
 		for (Cashier c : cashiers)
@@ -272,15 +299,13 @@ public class Simulator extends BaseSimulator
 	@Override
 	public double getAverageWaitingTime()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return waitingTime.getAverage();
 	}
 
 	@Override
 	public double getAverageQueueSize()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return queueSize.getAverage();
 	}
 
 	@Override
