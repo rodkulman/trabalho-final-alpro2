@@ -143,4 +143,15 @@ public class Simulator extends BaseSimulator
 		return clientQueue.size();
 	}
 
+	@Override
+	public int getAmountOfNoWaitServings()
+	{
+		return 0;
+	}
+	
+	@Override
+	public double getEmptyQueueTime()
+	{
+		return 0;
+	}
 }

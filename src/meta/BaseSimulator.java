@@ -92,7 +92,7 @@ public abstract class BaseSimulator
 			listener.ClientServed(cashier, c, time);
 		}
 	}
-	
+
 	protected void onCashierStartedServing(final Cashier cashier, final Client c, final int time)
 	{
 		if (listener != null)
@@ -164,4 +164,19 @@ public abstract class BaseSimulator
 	 * @return A integer value indicating the amount of clients yet in queue.
 	 */
 	public abstract int getClientsInQueue();
+
+	/**
+	 * Indicates the amount of clients that didn't wait in a queue to be served.
+	 * 
+	 * @return A integer value indicating the amount of clients that didn't wait
+	 *         in a queue to be served.
+	 */
+	public abstract int getAmountOfNoWaitServings();
+
+	/**
+	 * Indicates the total time queues were empty.
+	 * 
+	 * @return A integer value indicating the total time queues were empty.
+	 */
+	public abstract double getEmptyQueueTime();
 }

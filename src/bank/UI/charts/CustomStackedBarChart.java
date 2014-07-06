@@ -45,11 +45,12 @@ public class CustomStackedBarChart extends JFreeChart
 
 		// sets the plot to paint flat
 		this.renderer.setBarPainter(new StandardBarPainter());
-		this.renderer.setShadowVisible(false);
+		this.renderer.setShadowVisible(false);		
 		
 		this.plot.setRenderer(renderer);
-		this.plot.setRangeGridlinePaint(Color.BLACK);
-
+		this.plot.setRangeGridlinePaint(Color.BLACK);		
+		this.plot.getDomainAxis().setTickLabelsVisible(false);
+		
 		this.setBackgroundPaint(Color.WHITE);
 	}
 

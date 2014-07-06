@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import meta.*;
+import meta.collections.KeyValuePair;
+import meta.collections.LinkedDictionary;
 import bank.*;
 import bank.UI.charts.*;
 
@@ -18,8 +20,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import config.XMLConfig;
 import services.*;
-
-import javax.swing.GroupLayout.Alignment;
 
 /**
  * The UI for the bank simulator app.
@@ -69,13 +69,17 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 	private JFreeChart cashierPerformanceOTChart;
 	private DefaultCategoryDataset dsCashierPerformanceOT;
-	private ChartPanel clientsServedOverTimeChartPanel;
+	private ChartPanel cashierPerformanceOTChartPanel;
 
 	private JTabbedPane tabs;
 	private JPanel currentSimulationTab;
 	private JPanel eventsTab;
 	private JPanel configuationTab;
 	private JPanel simulationOverTimeTab;
+
+	private JLabel lblAverageWaitingTime;
+	private JLabel lblAverageQueueSize;
+	private JLabel lblAmountOfNoWaitServings;
 
 	// End of window components
 
@@ -89,8 +93,13 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 	private final Color prioritiesColor = new Color(0x00, 0xCC, 0x00);
 	private final Color managersColor = new Color(0x33, 0x33, 0xFF);
 	private final Color priorityManagersColor = new Color(0x99, 0x33, 0x33);
-	private JLabel lblAverageWaitingTime;
-	private JLabel lblAverageQueueSize;
+	private JLabel lblTotalEmptyQueueTime;
+	private JLabel lblDuration;
+	private JLabel lblArrivalProbability;
+	private JLabel lblAverageClientsPer;
+	private JLabel lblMinimumServingTime;
+	private JLabel lblMaximumServingTime;
+	private JLabel lblEstimatedAverageServing;
 
 	/**
 	 * Creates the frame.
@@ -168,8 +177,11 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		// probability Chart
 
-		// a thanks to Rafael Wasilewski <wasilewski1991@gmail.com> for the math on probabilities
-		
+		/*
+		 * a thanks to Rafael Wasilewski <wasilewski1991@gmail.com> for the math
+		 * on probabilities
+		 */
+
 		probabilityChart = new CustomPieChart("Probability of New Clients");
 		probabilityChart.addNewCategory("Regular", (1 - XMLConfig.getDouble("priorityProbality")) * (1 - XMLConfig.getDouble("managerProbality")));
 		probabilityChart.addNewCategory("Priority", XMLConfig.getDouble("priorityProbality") * (1 - XMLConfig.getDouble("managerProbality")));
@@ -180,12 +192,12 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		probabilityChart.setSectionPaint("Priority", prioritiesColor);
 		probabilityChart.setSectionPaint("Manager", managersColor);
 		probabilityChart.setSectionPaint("Priority Manager", priorityManagersColor);
-		
+
 		probabilityChart.setLabelMode(PieSectionNumericLabelGenerator.PERCENTAGE_MODE);
-		
+
 		probabilityChartPanel = new ChartPanel(probabilityChart);
 		probabilityChartPanel.setBounds(10, 277, 402, 229);
-		
+
 		// newClientsByCashierChart
 
 		cashierPerformanceChart = new CustomStackedBarChart("Cashier Performance", "", "Clients");
@@ -221,34 +233,34 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		cashierPerformanceOTChart.getTitle().setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		cashierPerformanceOTChart.setBackgroundPaint(Color.WHITE);
 
-		CategoryPlot plotCFOT = cashierPerformanceOTChart.getCategoryPlot();
+		CategoryPlot plotCPOT = cashierPerformanceOTChart.getCategoryPlot();
 
-		plotCFOT.setBackgroundPaint(Color.WHITE);
-		plotCFOT.setRangeGridlinePaint(Color.BLACK);
-		plotCFOT.setDomainGridlinesVisible(true);
-		plotCFOT.setDomainGridlinePaint(Color.BLACK);
+		plotCPOT.setBackgroundPaint(Color.WHITE);
+		plotCPOT.setRangeGridlinePaint(Color.BLACK);
+		plotCPOT.setDomainGridlinesVisible(true);
+		plotCPOT.setDomainGridlinePaint(Color.BLACK);
 
-		LineAndShapeRenderer rendererCFOT = (LineAndShapeRenderer) cashierPerformanceOTChart.getCategoryPlot().getRenderer();
+		LineAndShapeRenderer rendererCPOT = (LineAndShapeRenderer) cashierPerformanceOTChart.getCategoryPlot().getRenderer();
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 6; i++)
 		{
-			rendererCFOT.setSeriesShapesVisible(i, true);
-			rendererCFOT.setSeriesPaint(i, getCashierColor(simulator.getCashiers().at(i)));
+			rendererCPOT.setSeriesShapesVisible(i, true);
 		}
 
-		rendererCFOT.setSeriesShapesVisible(5, true);
-		rendererCFOT.setSeriesPaint(5, notServedColor);
+		rendererCPOT.setSeriesPaint(0, regularsColor);
+		rendererCPOT.setSeriesPaint(1, prioritiesColor);
+		rendererCPOT.setSeriesPaint(2, managersColor);
+		rendererCPOT.setSeriesPaint(3, priorityManagersColor);
+		rendererCPOT.setSeriesPaint(4, notServedColor);
+		rendererCPOT.setSeriesPaint(5, notFinishedServingColor);
 
-		rendererCFOT.setSeriesShapesVisible(6, true);
-		rendererCFOT.setSeriesPaint(6, notFinishedServingColor);
-
-		clientsServedOverTimeChartPanel = new ChartPanel(cashierPerformanceOTChart);
-		clientsServedOverTimeChartPanel.setSize(735, 496);
-		clientsServedOverTimeChartPanel.setLocation(10, 10);
+		cashierPerformanceOTChartPanel = new ChartPanel(cashierPerformanceOTChart);
+		cashierPerformanceOTChartPanel.setSize(735, 496);
+		cashierPerformanceOTChartPanel.setLocation(10, 10);
 
 		// btnRunSimulator
 
-		btnRunSimulator = new JButton("Run Simulator");
+		btnRunSimulator = new JButton("Run Simulation");
 		btnRunSimulator.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		btnRunSimulator.setBounds(649, 568, 121, 46);
 		btnRunSimulator.addActionListener(btnRunSimulator_Click());
@@ -271,7 +283,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		simulationOverTimeTab.setBackground(Color.WHITE);
 		simulationOverTimeTab.setLayout(null);
 
-		simulationOverTimeTab.add(clientsServedOverTimeChartPanel);
+		simulationOverTimeTab.add(cashierPerformanceOTChartPanel);
 
 		JScrollPane scrollPane = new JScrollPane(lstLogs);
 		scrollPane.setBounds(10, 11, 511, 364);
@@ -292,24 +304,64 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		configuationTab.add(probabilityChartPanel);
 
 		tabs.addTab("Configuration", configuationTab);
+
+		JPanel configPanel = new JPanel();
+		configPanel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Other Configuration", TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Segoe UI", Font.PLAIN, 18), null));
+		configPanel.setBackground(Color.WHITE);
+		configPanel.setBounds(422, 11, 323, 495);
+		configuationTab.add(configPanel);
+		configPanel.setLayout(new GridLayout(10, 1, 0, 5));
+
+		lblDuration = new JLabel("Duration: " + XMLConfig.getInt("duration"));
+		lblDuration.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		configPanel.add(lblDuration);
+
+		lblArrivalProbability = new JLabel("Arrival Probability: " + (XMLConfig.getDouble("arrivalProbability") * 100) + "%");
+		lblArrivalProbability.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		configPanel.add(lblArrivalProbability);
+
+		lblAverageClientsPer = new JLabel("Estimated Clients per Simulation: " + XMLConfig.getInt("duration") * XMLConfig.getDouble("arrivalProbability"));
+		lblAverageClientsPer.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		configPanel.add(lblAverageClientsPer);
+
+		lblMinimumServingTime = new JLabel("Minimum Serving Time: " + XMLConfig.getInt("minServingTime"));
+		lblMinimumServingTime.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		configPanel.add(lblMinimumServingTime);
+
+		lblMaximumServingTime = new JLabel("Maximum Serving Time " + XMLConfig.getInt("maxServingTime"));
+		lblMaximumServingTime.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		configPanel.add(lblMaximumServingTime);
+
+		lblEstimatedAverageServing = new JLabel("Estimated Average Serving Time: " + ((XMLConfig.getInt("minServingTime") + XMLConfig.getInt("maxServingTime")) / 2));
+		lblEstimatedAverageServing.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		configPanel.add(lblEstimatedAverageServing);
 		tabs.addTab("Current Simulation", currentSimulationTab);
 		tabs.addTab("Simulations Over Time", simulationOverTimeTab);
 
 		statisticsPanel = new JPanel();
 		statisticsPanel.setBackground(Color.WHITE);
-		statisticsPanel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Statistics", TitledBorder.LEADING, TitledBorder.TOP, new Font("Segoe UI", Font.PLAIN, 14), null));
+		statisticsPanel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Statistics", TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Segoe UI", Font.PLAIN, 18), null));
+
 		statisticsPanel.setBounds(380, 268, 365, 238);
 		currentSimulationTab.add(statisticsPanel);
 		statisticsPanel.setLayout(new GridLayout(8, 1, 0, 0));
-
-		lblAverageQueueSize = new JLabel("Average Queue Size: 0.0");
-		lblAverageQueueSize.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		lblAverageWaitingTime = new JLabel("Average Waiting Time: 0.0");
 		lblAverageWaitingTime.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		statisticsPanel.add(lblAverageWaitingTime);
+
+		lblAverageQueueSize = new JLabel("Average Queues Size: 0.0");
+		lblAverageQueueSize.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		statisticsPanel.add(lblAverageQueueSize);
+
+		lblAmountOfNoWaitServings = new JLabel("Amount of Clients That didn't Wait: 0");
+		lblAmountOfNoWaitServings.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		statisticsPanel.add(lblAmountOfNoWaitServings);
+
+		lblTotalEmptyQueueTime = new JLabel("Total Time Queues Were Empty: 0");
+		lblTotalEmptyQueueTime.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		statisticsPanel.add(lblTotalEmptyQueueTime);
 
 		tabs.addTab("Simulation Events", eventsTab);
 
@@ -412,23 +464,71 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			{
 				btnRunSimulator.setEnabled(true);
 				lblAverageWaitingTime.setText(String.format("Average Waiting Time: %s", simulator.getAverageWaitingTime()));
-				lblAverageQueueSize.setText(String.format("Average Queue Size: %s", simulator.getAverageQueueSize()));
+				lblAverageQueueSize.setText(String.format("Average Queues Size: %s", simulator.getAverageQueueSize()));
+				lblAmountOfNoWaitServings.setText(String.format("Amount of Clients That didn't Wait: %s", simulator.getAmountOfNoWaitServings()));
+				lblTotalEmptyQueueTime.setText(String.format("Total Time Queues Were Empty: %s", Math.round(simulator.getEmptyQueueTime() * 100)) + "%");
 
 				// gets the number of the simulation
-				int simulation = dsCashierPerformanceOT.getColumnCount() + 1;
+				int simulation = 1;
+
+				if (dsCashierPerformanceOT.getColumnCount() > 0)
+				{
+					simulation = Integer.parseInt(dsCashierPerformanceOT.getColumnKey(dsCashierPerformanceOT.getColumnCount() - 1).toString()) + 1;
+				}
 
 				double notFinishedServing = 0.0;
+
+				LinkedDictionary<String, Double> values = new LinkedDictionary<>();
+				values.add("Regular", 0.0);
+				values.add("Priority", 0.0);
+				values.add("Manager", 0.0);
+				values.add("Priority Manager", 0.0);
 
 				for (Cashier c : simulator.getCashiers())
 				{
 					double value = cashierPerformanceChart.getValue("Served", "Cashier " + c.getId());
+					String key;
+					
 					notFinishedServing += cashierPerformanceChart.getValue("Not Served", "Cashier " + c.getId());
 
-					dsCashierPerformanceOT.addValue(value, "Cashier " + c.getId(), String.valueOf(simulation));
+					if (c.isManager())
+					{
+						if (c.isPriority())
+						{
+							key = "Priority Manager";
+						}
+						else
+						{
+							key = "Manager";
+						}
+					}
+					else
+					{
+						if (c.isPriority())
+						{
+							key = "Priority";
+						}
+						else
+						{
+							key = "Regular";
+						}
+					}
+
+					values.setValue(key, values.getValue(key) + value);
 				}
 
-				double waiting = cashierPerformanceChart.getValue("Not Served", "Waiting");
+				if (simulation > 15)
+				{
+					dsCashierPerformanceOT.removeColumn(String.valueOf(simulation - 15));
+				}
 
+				for (KeyValuePair<String, Double> pair : values)
+				{
+					dsCashierPerformanceOT.addValue(pair.getValue(), pair.getKey(), String.valueOf(simulation));
+				}
+				
+				double waiting = cashierPerformanceChart.getValue("Not Served", "Waiting");
+				
 				dsCashierPerformanceOT.addValue(waiting, "Waiting", String.valueOf(simulation));
 				dsCashierPerformanceOT.addValue(notFinishedServing, "Not Finished Serving", String.valueOf(simulation));
 			}

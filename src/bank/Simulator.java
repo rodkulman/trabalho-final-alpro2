@@ -37,12 +37,22 @@ public class Simulator extends BaseSimulator
 	 * Measures the average waiting time
 	 */
 	private Counter waitingTime;
-	
+
 	/**
 	 * Measures the average queue size
 	 */
 	private Counter queueSize;
-	
+
+	/**
+	 * Stores the amount of clients that didn't wait to be served.
+	 */
+	private int amountOfNoWaitServings;
+
+	/**
+	 * Measures total average time queues were empty.
+	 */
+	private Counter emptyQueueTime;
+
 	/*
 	 * The inherited clientQueue object will be used as the initial queue
 	 */
@@ -69,11 +79,12 @@ public class Simulator extends BaseSimulator
 		managerQueue = new QueueLinked<>();
 		pCashierQueue = new QueueLinked<>();
 		pManagerQueue = new QueueLinked<>();
-		
+
 		// counters
 		waitingTime = new Counter();
 		queueSize = new Counter();
-		
+		emptyQueueTime = new Counter();
+
 		clear();
 	}
 
@@ -134,6 +145,7 @@ public class Simulator extends BaseSimulator
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void simulation(int time)
 	{
@@ -226,12 +238,26 @@ public class Simulator extends BaseSimulator
 				}
 			}
 		}
+
+		queueSize.add(clientQueue.size() + pCashierQueue.size() + pManagerQueue.size() + cashierQueue.size() + managerQueue.size());
 		
-		queueSize.add(clientQueue.size());
-		queueSize.add(pCashierQueue.size());
-		queueSize.add(pManagerQueue.size());
-		queueSize.add(cashierQueue.size());
-		queueSize.add(managerQueue.size());
+		checkEmptyQueue(clientQueue, pCashierQueue, pManagerQueue, cashierQueue, managerQueue);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void checkEmptyQueue(final IQueue<Client>... queues)
+	{
+		for (IQueue<Client> c : queues)
+		{
+			if (c.isEmpty())
+			{
+				emptyQueueTime.add(1);
+			}
+			else
+			{
+				emptyQueueTime.add(0);
+			}
+		}
 	}
 
 	/**
@@ -258,8 +284,14 @@ public class Simulator extends BaseSimulator
 				Client client = queue.dequeue();
 				c.serveNewClient(client);
 				onCashierStartedServing(c, client, time);
-				
-				// calculates the time it took to ger served
+
+				// checks whether the client didn't wait be served
+				if (client.getArrival() == time)
+				{
+					amountOfNoWaitServings++;
+				}
+
+				// calculates the time it took to get served
 				waitingTime.add(time - client.getArrival());
 			}
 			catch (Exception ex)
@@ -278,9 +310,10 @@ public class Simulator extends BaseSimulator
 		managerQueue.clear();
 		pCashierQueue.clear();
 		pManagerQueue.clear();
-		
+
 		waitingTime.clear();
-		queueSize.clear();
+		queueSize.clear();		
+		emptyQueueTime.clear();
 		
 		clientGenerator.clear();
 
@@ -288,6 +321,9 @@ public class Simulator extends BaseSimulator
 		{
 			c.clear();
 		}
+
+		amountOfNoWaitServings = 0;
+		
 	}
 
 	@Override
@@ -318,5 +354,17 @@ public class Simulator extends BaseSimulator
 	public int getClientsInQueue()
 	{
 		return clientQueue.size() + cashierQueue.size() + managerQueue.size() + pCashierQueue.size() + pManagerQueue.size();
+	}
+
+	@Override
+	public int getAmountOfNoWaitServings()
+	{
+		return amountOfNoWaitServings;
+	}
+
+	@Override
+	public double getEmptyQueueTime()
+	{
+		return emptyQueueTime.getAverage();
 	}
 }

@@ -66,10 +66,33 @@ public class LinkedDictionary<TKey, TValue> extends ListLinked<KeyValuePair<TKey
 	}
 
 	/**
+	 * Sets or add a value to the specified key.
+	 * 
+	 * @param key
+	 *            Key to search for.
+	 * @param value
+	 *            Value to be set.
+	 */
+	public void setValue(TKey key, TValue value)
+	{
+		for (KeyValuePair<TKey, TValue> pair : this)
+		{
+			if (pair.getKey().equals(key))
+			{
+				pair.setValue(value);
+				return;
+			}
+		}
+
+		// if it reaches here, it means there is no such key
+		this.add(key, value);
+	}
+
+	/**
 	 * Collects all the keys in the dictionary.
 	 * 
-	 * @return Returns a read-only collection of TKey containing all the keys in this
-	 *         dictionary.
+	 * @return Returns a read-only collection of TKey containing all the keys in
+	 *         this dictionary.
 	 */
 	public ListLinked<TKey> getKeys()
 	{
@@ -82,7 +105,7 @@ public class LinkedDictionary<TKey, TValue> extends ListLinked<KeyValuePair<TKey
 
 		// turns the list read-only so it can't be touched.
 		retVal.makeReadOnly();
-		
+
 		return retVal;
 	}
 }

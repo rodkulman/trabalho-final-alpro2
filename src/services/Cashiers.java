@@ -120,4 +120,9 @@ public class Cashiers implements Iterable<Cashier>
 
 		return false;
 	}
+	
+	public int size()
+	{
+		return cashiers.size();
+	}
 }
