@@ -178,5 +178,5 @@ public abstract class BaseSimulator
 	 * 
 	 * @return A integer value indicating the total time queues were empty.
 	 */
-	public abstract double getEmptyQueueTime();
+	public abstract int getEmptyQueueTime();
 }

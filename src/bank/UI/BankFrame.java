@@ -144,8 +144,29 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		lstLogs.setSize(511, 364);
 		lstLogs.setBackground(Color.LIGHT_GRAY);
 		lstLogs.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lstLogs.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		lstLogs.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		lstLogs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		lstLogs.setCellRenderer(new ListCellRenderer<String>()
+		{
+			@Override
+			public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus)
+			{
+				JLabel retVal = new JLabel(value);
+
+				retVal.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+
+				if (value.trim().endsWith("arrived."))
+				{
+					retVal.setForeground(new Color(066, 0x00, 0x66));
+				}
+				else
+				{
+					retVal.setForeground(new Color(0x00, 0x88, 0x00));
+				}
+				
+				return retVal;
+			}
+		});
 
 		// clients chart
 
@@ -277,16 +298,16 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 
 		eventsTab = new JPanel();
 		eventsTab.setBackground(Color.WHITE);
-		eventsTab.setLayout(null);
 
 		simulationOverTimeTab = new JPanel();
 		simulationOverTimeTab.setBackground(Color.WHITE);
 		simulationOverTimeTab.setLayout(null);
 
 		simulationOverTimeTab.add(cashierPerformanceOTChartPanel);
+		eventsTab.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane(lstLogs);
-		scrollPane.setBounds(10, 11, 511, 364);
+		scrollPane.setBounds(10, 11, 735, 495);
 
 		eventsTab.add(scrollPane);
 
@@ -312,7 +333,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		configuationTab.add(configPanel);
 		configPanel.setLayout(new GridLayout(10, 1, 0, 5));
 
-		lblDuration = new JLabel("Duration: " + XMLConfig.getInt("duration"));
+		lblDuration = new JLabel("Duration: " + XMLConfig.getInt("duration") + " min");
 		lblDuration.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		configPanel.add(lblDuration);
 
@@ -324,15 +345,15 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		lblAverageClientsPer.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		configPanel.add(lblAverageClientsPer);
 
-		lblMinimumServingTime = new JLabel("Minimum Serving Time: " + XMLConfig.getInt("minServingTime"));
+		lblMinimumServingTime = new JLabel("Minimum Serving Time: " + XMLConfig.getInt("minServingTime") + " min");
 		lblMinimumServingTime.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		configPanel.add(lblMinimumServingTime);
 
-		lblMaximumServingTime = new JLabel("Maximum Serving Time " + XMLConfig.getInt("maxServingTime"));
+		lblMaximumServingTime = new JLabel("Maximum Serving Time " + XMLConfig.getInt("maxServingTime") + " min");
 		lblMaximumServingTime.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		configPanel.add(lblMaximumServingTime);
 
-		lblEstimatedAverageServing = new JLabel("Estimated Average Serving Time: " + ((XMLConfig.getInt("minServingTime") + XMLConfig.getInt("maxServingTime")) / 2));
+		lblEstimatedAverageServing = new JLabel("Estimated Average Serving Time: " + ((XMLConfig.getInt("minServingTime") + XMLConfig.getInt("maxServingTime")) / 2) + " min");
 		lblEstimatedAverageServing.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		configPanel.add(lblEstimatedAverageServing);
 		tabs.addTab("Current Simulation", currentSimulationTab);
@@ -346,7 +367,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		currentSimulationTab.add(statisticsPanel);
 		statisticsPanel.setLayout(new GridLayout(8, 1, 0, 0));
 
-		lblAverageWaitingTime = new JLabel("Average Waiting Time: 0.0");
+		lblAverageWaitingTime = new JLabel("Average Waiting Time: 0.0 min");
 		lblAverageWaitingTime.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		statisticsPanel.add(lblAverageWaitingTime);
@@ -359,7 +380,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 		lblAmountOfNoWaitServings.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		statisticsPanel.add(lblAmountOfNoWaitServings);
 
-		lblTotalEmptyQueueTime = new JLabel("Total Time Queues Were Empty: 0");
+		lblTotalEmptyQueueTime = new JLabel("Total Time Queues Were Empty: 0 / 0 min");
 		lblTotalEmptyQueueTime.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		statisticsPanel.add(lblTotalEmptyQueueTime);
 
@@ -404,6 +425,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			{
 				clientChart.clearValues();
 				cashierPerformanceChart.clearValues();
+				listModel.clear();
 
 				btnRunSimulator.setEnabled(false);
 
@@ -463,10 +485,10 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 			public void run()
 			{
 				btnRunSimulator.setEnabled(true);
-				lblAverageWaitingTime.setText(String.format("Average Waiting Time: %s", simulator.getAverageWaitingTime()));
-				lblAverageQueueSize.setText(String.format("Average Queues Size: %s", simulator.getAverageQueueSize()));
+				lblAverageWaitingTime.setText(String.format("Average Waiting Time: %.2f min", simulator.getAverageWaitingTime()));
+				lblAverageQueueSize.setText(String.format("Average Queues Size: %.2f", simulator.getAverageQueueSize()));
 				lblAmountOfNoWaitServings.setText(String.format("Amount of Clients That didn't Wait: %s", simulator.getAmountOfNoWaitServings()));
-				lblTotalEmptyQueueTime.setText(String.format("Total Time Queues Were Empty: %s", Math.round(simulator.getEmptyQueueTime() * 100)) + "%");
+				lblTotalEmptyQueueTime.setText(String.format("Total Time Queues Were Empty: %s / %s min", simulator.getEmptyQueueTime(), simulator.getCashiers().size() * XMLConfig.getInt("duration")));
 
 				// gets the number of the simulation
 				int simulation = 1;
@@ -488,7 +510,7 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 				{
 					double value = cashierPerformanceChart.getValue("Served", "Cashier " + c.getId());
 					String key;
-					
+
 					notFinishedServing += cashierPerformanceChart.getValue("Not Served", "Cashier " + c.getId());
 
 					if (c.isManager())
@@ -526,9 +548,9 @@ public class BankFrame extends JFrame implements AppendableListener, SimulatorLi
 				{
 					dsCashierPerformanceOT.addValue(pair.getValue(), pair.getKey(), String.valueOf(simulation));
 				}
-				
+
 				double waiting = cashierPerformanceChart.getValue("Not Served", "Waiting");
-				
+
 				dsCashierPerformanceOT.addValue(waiting, "Waiting", String.valueOf(simulation));
 				dsCashierPerformanceOT.addValue(notFinishedServing, "Not Finished Serving", String.valueOf(simulation));
 			}

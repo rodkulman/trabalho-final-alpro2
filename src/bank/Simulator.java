@@ -51,7 +51,7 @@ public class Simulator extends BaseSimulator
 	/**
 	 * Measures total average time queues were empty.
 	 */
-	private Counter emptyQueueTime;
+	private int emptyQueueTime;
 
 	/*
 	 * The inherited clientQueue object will be used as the initial queue
@@ -83,7 +83,6 @@ public class Simulator extends BaseSimulator
 		// counters
 		waitingTime = new Counter();
 		queueSize = new Counter();
-		emptyQueueTime = new Counter();
 
 		clear();
 	}
@@ -251,11 +250,7 @@ public class Simulator extends BaseSimulator
 		{
 			if (c.isEmpty())
 			{
-				emptyQueueTime.add(1);
-			}
-			else
-			{
-				emptyQueueTime.add(0);
+				emptyQueueTime++;
 			}
 		}
 	}
@@ -313,7 +308,6 @@ public class Simulator extends BaseSimulator
 
 		waitingTime.clear();
 		queueSize.clear();		
-		emptyQueueTime.clear();
 		
 		clientGenerator.clear();
 
@@ -323,7 +317,7 @@ public class Simulator extends BaseSimulator
 		}
 
 		amountOfNoWaitServings = 0;
-		
+		emptyQueueTime = 0;
 	}
 
 	@Override
@@ -363,8 +357,8 @@ public class Simulator extends BaseSimulator
 	}
 
 	@Override
-	public double getEmptyQueueTime()
+	public int getEmptyQueueTime()
 	{
-		return emptyQueueTime.getAverage();
+		return emptyQueueTime;
 	}
 }

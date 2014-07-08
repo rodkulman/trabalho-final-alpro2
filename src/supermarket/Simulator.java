@@ -150,7 +150,7 @@ public class Simulator extends BaseSimulator
 	}
 	
 	@Override
-	public double getEmptyQueueTime()
+	public int getEmptyQueueTime()
 	{
 		return 0;
 	}
