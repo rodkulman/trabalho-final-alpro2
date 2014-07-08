@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <interface id="1" language="java" name="meta.collections.IListLinked" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/IListLinked.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="130" x="819" y="1924"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="2" language="java" name="meta.collections.Table" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/Table.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="237" x="2825" y="1533"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="meta.collections.ReadOnlyException" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/ReadOnlyException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="134" x="209" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="bank.UI.charts.CustomStackedBarRenderer" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/charts/CustomStackedBarRenderer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="214" x="2825" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="meta.collections.LinkedNode" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/LinkedNode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="112" x="418" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="6" language="java" name="meta.collections.IList" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/IList.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="112" x="819" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="7" language="java" name="config.XMLConfig" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/config/XMLConfig.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="225" width="173" x="1292" y="1533"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="8" language="java" name="meta.SimulatorListener" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/SimulatorListener.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="245" x="1386" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="9" language="java" name="meta.collections.EmptyQueueException" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/EmptyQueueException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="152" x="383" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="bank.UI.charts.CustomPieChart" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/charts/CustomPieChart.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="279" width="205" x="2328" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="meta.Trace" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/Trace.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="162" x="575" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="meta.collections.BasicLinkedList" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/BasicLinkedList.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="136" x="926" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="services.Cashiers" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/services/Cashiers.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="254" x="2053" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="bank.UI.App" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/App.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="113" x="777" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="supermarket.App" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/supermarket/App.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="113" x="930" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="meta.collections.QueueLinked" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/QueueLinked.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="120" x="1205" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="meta.collections.DuplicateKeyException" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/DuplicateKeyException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="154" x="1083" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="meta.Counter" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/Counter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="126" x="1505" y="1533"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="meta.collections.LinkedDictionary" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/LinkedDictionary.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="201" x="1904" y="1924"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="20" language="java" name="meta.collections.IQueue" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/IQueue.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="105" x="1671" y="1533"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="21" language="java" name="config.ConfigInfo" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/config/ConfigInfo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="176" x="1277" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="bank.UI.charts.PieSectionNumericLabelGenerator" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/charts/PieSectionNumericLabelGenerator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="207" width="375" x="2368" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="meta.collections.ListLinked" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/ListLinked.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="315" width="269" x="2516" y="1533"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="bank.UI.charts.CustomStackedBarChart" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/charts/CustomStackedBarChart.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="242" x="2764" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="bank.UI.UILogger" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/UILogger.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="266" x="3046" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="meta.BaseSimulator" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/BaseSimulator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="405" width="257" x="1731" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="bank.Simulator" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/Simulator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="351" width="321" x="1671" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="services.ClientGenerator" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/services/ClientGenerator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="199" x="580" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="services.Cashier" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/services/Cashier.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="351" width="160" x="859" y="1533"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="meta.collections.KeyValuePair" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/KeyValuePair.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="181" x="1493" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="bank.UI.charts.CustomTableCellRenderer" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/charts/CustomTableCellRenderer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="421" x="1714" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="32" language="java" name="meta.collections.IQueryable" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/IQueryable.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="113" x="2175" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="33" language="java" name="supermarket.Simulator" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/supermarket/Simulator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="194" x="971" y="1142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="34" language="java" name="meta.collections.LinkedIterator" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/meta/collections/LinkedIterator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="173" x="418" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="35" language="java" name="bank.UI.AppendableListener" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/AppendableListener.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="138" x="1532" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="36" language="java" name="services.Client" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/services/Client.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="315" width="178" x="580" y="1924"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="37" language="java" name="bank.UI.BankFrame" project="trabalho_final_rck" 
+    file="/trabalho_final_rck/src/bank/UI/BankFrame.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="837" width="271" x="2328" y="-180"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="38">    
+    <bendpoint x="2022" y="1142"/>    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="39" name="clientQueue"/>      
+      <multiplicity id="40" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="41">    
+    <bendpoint x="589" y="1533"/>    
+    <end type="SOURCE" refId="28" navigable="false">      
+      <attribute id="42" name="generatedClient"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="36" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="44">    
+    <end type="SOURCE" refId="34" navigable="false">      
+      <attribute id="45" name="current"/>      
+      <multiplicity id="46" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="48" name="logger"/>      
+      <multiplicity id="49" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="50">    
+    <bendpoint x="2794" y="1142"/>    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="51" name="rowCategories"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="54" name="clientChart"/>      
+      <multiplicity id="55" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="57" name="listener"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="59">    
+    <bendpoint x="1355" y="1142"/>    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <association id="60">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="61" name="cashier"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="64" name="watingTime"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="67" name="cashiers"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="69">    
+    <bendpoint x="2018" y="697"/>    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="70" name="simulator"/>      
+      <multiplicity id="71" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="72">    
+    <bendpoint x="3069" y="1142"/>    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="73" name="listeners"/>      
+      <multiplicity id="74" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="75">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="23"/>  
+  </generalization>  
+  <generalization id="76">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <association id="77">    
+    <bendpoint x="2773" y="1142"/>    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="78" name="columnCategories"/>      
+      <multiplicity id="79" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="80">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="81" name="renderer"/>      
+      <multiplicity id="82" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="83">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="84" name="tail"/>      
+      <multiplicity id="85" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="86">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="87" name="legendsColors"/>      
+      <multiplicity id="88" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="89">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="90" name="queueSize"/>      
+      <multiplicity id="91" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="92">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <association id="93">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="94" name="pManagerQueue"/>      
+      <multiplicity id="95" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="96">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="97" name="legends"/>      
+      <multiplicity id="98" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="99">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="26"/>  
+  </generalization>  
+  <association id="100">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="101" name="managerQueue"/>      
+      <multiplicity id="102" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="103">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="104" name="queueSize"/>      
+      <multiplicity id="105" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="106">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="107" name="cashiersChart"/>      
+      <multiplicity id="108" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="109">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
+  <association id="110">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="111" name="pCashierQueue"/>      
+      <multiplicity id="112" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="113">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="114" name="data"/>      
+      <multiplicity id="115" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="116">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="117" name="cashierQueue"/>      
+      <multiplicity id="118" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="119">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="120">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="121" name="labelGenerator"/>      
+      <multiplicity id="122" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="123">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="35"/>  
+  </realization>  
+  <association id="124">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="125" name="waitingTime"/>      
+      <multiplicity id="126" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="127">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <association id="128">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="129" name="probabilityChart"/>      
+      <multiplicity id="130" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="131">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="132" name="head"/>      
+      <multiplicity id="133" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="134">    
+    <bendpoint x="1700" y="697"/>    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="8"/>  
+  </realization>  
+  <association id="135">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="136" name="cashiers"/>      
+      <multiplicity id="137" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="138">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="139" name="clientGenerator"/>      
+      <multiplicity id="140" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="141">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="142" name="currentClient"/>      
+      <multiplicity id="143" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="36" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="144">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="145" name="paints"/>      
+      <multiplicity id="146" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="147">    
+    <bendpoint x="828" y="1533"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <generalization id="148">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="26"/>  
+  </generalization>  
+  <association id="149">    
+    <bendpoint x="2337" y="1142"/>    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="150" name="categories"/>      
+      <multiplicity id="151" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="152">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="153" name="next"/>      
+      <multiplicity id="154" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="155">    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="156" name="cashierPerformanceChart"/>      
+      <multiplicity id="157" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
