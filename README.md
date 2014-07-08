@@ -2,6 +2,8 @@
   Bank Agency Simulator
 =======
 - [Specification](tf-2014-1.pdf)
+- [Class Diagram](doc/diagram.png)
+- [Article](doc/article.odt)
 
 =============
 Special thanks:
